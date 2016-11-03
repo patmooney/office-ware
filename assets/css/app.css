@@ -1,0 +1,27 @@
+body {
+    font-family: arial;
+    color: #222;
+}
+div.box {
+    border: solid 1px #e7e7e7;
+    background-color: #eee;
+    text-align: center;
+    padding: 20px;
+}
+div.box > h2 {
+    text-align: center;
+    margin: 10px;
+    font-size: 40px;
+}
+input, button {
+    margin: 10px;
+}
+div.container {
+    height: 200px;
+    width: 800px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -400px;
+}
