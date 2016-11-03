@@ -1,24 +1,27 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <script type="application/javascript" src="/static/js/vendor.js"></script>
-        <script type="application/javascript" src="/static/js/app.js"></script>
-        <link rel="stylesheet" type="text/css" href="/static/css/vendor.css" />
-        <link rel="stylesheet" type="text/css" href="/static/css/app.css" />
-    </head>
-    <body>
-        <div class="container" id="container-1">
-            <div class="box">
-                <h2>Holiday Request</h2>
-                <input name="from" id="datepicker-from" placeholder="Date From"/>
-                <input name="to" id="datepicker-to" placeholder="Date To"/>
-                <button id="send-request">Submit</button>
+    {{#wrap 'layout'}}
+
+        <div class="big-container" id="big-container-1">
+            <div class="container" id="container-1">
+                <div class="box">
+                    <h2>Holiday Request</h2>
+                    <input name="from" id="datepicker-from" placeholder="Date From"/>
+                    <input name="to" id="datepicker-to" placeholder="Date To"/>
+                    <button id="send-request">Submit</button>
+                </div>
+            </div>
+
+            <div class="container" id="container-2" style="display: none;">
+                <div class="box">
+                    <h3>Sending request...</h3>
+                </div>
+            </div>
+
+            <div class="box-down">
+                <p>View holiday requests</p>
+                <i class="icon-down-big" id="view-holiday"></i>
             </div>
         </div>
-        <div class="container" id="container-2" style="display: none;">
-            <div class="box">
-                <h3>Sending request...</h3>
-            </div>
+        <div class="big-container" id="big-container-2" style="display: none;">
+            <h3>HELLO</h3>
         </div>
-    </body>
-</html>
+    {{/wrap}}

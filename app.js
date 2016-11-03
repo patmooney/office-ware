@@ -1,10 +1,12 @@
 var express = require('express');
 var utils = require('./lib/utils.js');
+var hbs = require('handlebars');
 
 [
     './public',
     './public/css',
-    './public/js'
+    './public/js',
+    './public/fontello'
 ].forEach( function ( dir ) {
     utils.makeDirIfNotExists( dir );
 });
@@ -25,8 +27,17 @@ utils.prepareAssets({
     ]
 });
 
-var templates = utils.compileTemplates( './templates' );
+utils.prepareStatic({
+    './assets/fontello/css': './public/fontello/css',
+    './assets/fontello/font': './public/fontello/font'
+});
 
+hbs.registerHelper('wrap', function ( context, options ) {
+    return templates[context]({
+        content: options.fn(this)
+    });
+});
+var templates = utils.compileTemplates( './templates' );
 var app = express();
 
 app.use('/static', express.static('public'))
