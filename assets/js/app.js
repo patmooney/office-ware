@@ -1,5 +1,5 @@
 
-var _transitionTime = 1100;
+var _transitionTime = 1000;
 var _currentScreen = 1;
 
 $( function() {
