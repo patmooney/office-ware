@@ -2,6 +2,7 @@ var express = require('express');
 var utils = require('./lib/utils.js');
 var model = require('./lib/model.js');
 var hbs = require('handlebars');
+var db = require('./lib/database.js');
 
 var port = process.argv[2] || '3000';
 
@@ -56,6 +57,9 @@ app.get('/', function (req, res) {
 
 app.get('/api/holiday', function (req, res) {
     res.send( { data: model.fixtures } );
+});
+
+app.post('/api/holiday', function ( req, res ) {
 });
 
 app.listen(port, function () {
