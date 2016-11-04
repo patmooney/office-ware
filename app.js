@@ -3,6 +3,8 @@ var utils = require('./lib/utils.js');
 var model = require('./lib/model.js');
 var hbs = require('handlebars');
 
+var port = process.argv[2] || '3000';
+
 [
     './public',
     './public/css',
@@ -56,6 +58,6 @@ app.get('/api/holiday', function (req, res) {
     res.send( { data: model.fixtures } );
 });
 
-app.listen(3000, function () {
-    console.log( 'Server started.' );
+app.listen(port, function () {
+    console.log( 'Server started. PORT ' + port );
 });
