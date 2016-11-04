@@ -1,5 +1,6 @@
 var express = require('express');
 var utils = require('./lib/utils.js');
+var model = require('./lib/model.js');
 var hbs = require('handlebars');
 
 [
@@ -14,7 +15,8 @@ var hbs = require('handlebars');
 utils.prepareAssets({
     './public/js/vendor.js': [
         'node_modules/jquery/dist/jquery.min.js',
-        'node_modules/jquery-ui-dist/jquery-ui.min.js'
+        'node_modules/jquery-ui-dist/jquery-ui.min.js',
+        'node_modules/handlebars/dist/handlebars.min.js'
     ],
     './public/css/vendor.css': [
         'node_modules/jquery-ui-dist/jquery-ui.min.css'
@@ -37,13 +39,19 @@ hbs.registerHelper('wrap', function ( context, options ) {
         content: options.fn(this)
     });
 });
-var templates = utils.compileTemplates( './templates' );
+
+var templates = utils.compileTemplates( './templates', './public/js/templates.js' );
+
 var app = express();
 
 app.use('/static', express.static('public'))
 
 app.get('/', function (req, res) {
-    res.send( templates['index']({ name: req.query.name }) );
+    res.send( templates['index']() );
+});
+
+app.get('/api/holiday', function (req, res) {
+    res.send( { data: model.fixtures } );
 });
 
 app.listen(3000, function () {
