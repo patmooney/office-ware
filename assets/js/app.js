@@ -1,20 +1,30 @@
+
+var _transitionTime = 1100;
+var _currentScreen = 1;
+
 $( function() {
 
-    var transitionTime = 1500;
     $( "#datepicker-from, #datepicker-to" ).datepicker();
-//    $( "#datepicker-to" ).datepicker();
     $( "#send-request" ).click( function () {
-        $('#container-1').toggle('slide', { direction: "up", duration: transitionTime });
-        $('#container-2').toggle('slide', { direction: "down", duration: transitionTime });
+        transition( 2 );
+        submitRequest(
+            function ( data ) {
+                console.log( data );
+                refreshHoliday();
+                transition(3);
+            },
+            function ( aj, stat, err ){
+                $('#big-container-2 > div').html(
+                    "<h3>"+err+"</h3>" +
+                    "<p>Something bad has happened, <a href='#' onclick='transition(1)'>go back</a>"
+                );
+            }
+        );
     });
     $( "#view-holiday" ).click( function () {
-        $('body').css({overflow: 'hidden'});
-        $('#big-container-1').toggle('slide', { direction: "up", duration: transitionTime });
-        $('#big-container-2').toggle('slide', { direction: "down", duration: transitionTime });
-        setTimeout(function() {$('body').css({overflow: 'auto'});}, transitionTime);
+        transition(3);
+        refreshHoliday();
     });
-
-
 });
 
 var refreshHoliday = function () {
@@ -22,7 +32,7 @@ var refreshHoliday = function () {
         '/api/holiday',
         {
             success: function ( data ){
-                $('#holiday-list-container').html(
+                $('.holiday-list-container').html(
                     Handlebars.template(
                         Handlebars.templates['holiday-list']
                     )({ fixtures: data.data, hello: "sausage" })
@@ -30,4 +40,41 @@ var refreshHoliday = function () {
             }
         }
     );
+};
+
+var submitRequest = function ( cb, err_cb ) {
+    jQuery.ajax(
+        '/api/holiday',
+        {
+            method: 'POST',
+            success: cb,
+            error: err_cb
+        }
+    );
+};
+
+var transition = function ( to ) {
+
+    if ( to == _currentScreen ) {
+        return false;
+    }
+
+    $('body').css({overflow: 'hidden'});
+    if ( to > _currentScreen ){
+        $('#big-container-'+_currentScreen).toggle('slide', { direction: "up", duration: _transitionTime });
+        $('#big-container-'+to).toggle('slide', { direction: "down", duration: _transitionTime });
+        $('#big-container-'+to+' > div.container').fadeIn( _transitionTime );
+        $('#big-container-'+_currentScreen+' > div.container').fadeOut( _transitionTime );
+    }
+    else {
+        $('#big-container-'+to).toggle('slide', { direction: "up", duration: _transitionTime });
+        $('#big-container-'+_currentScreen).toggle('slide', { direction: "down", duration: _transitionTime });
+        $('#big-container-'+to+' > div.container').fadeIn( _transitionTime );
+        $('#big-container-'+_currentScreen+' > div.container').fadeOut( _transitionTime );
+    }
+    setTimeout(function() {
+        $('body').css({overflow: 'auto'});
+    }, _transitionTime);
+
+    _currentScreen = to;
 };

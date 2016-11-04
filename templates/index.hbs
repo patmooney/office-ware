@@ -1,30 +1,52 @@
     {{#wrap 'layout'}}
+        <div id="login-admin">
+            <i class="icon-key"></i>
+        </div>
         <div class="big-container" id="big-container-1">
             <div class="container" id="container-1">
                 <div class="box">
                     <h2>Holiday Request</h2>
-                    <input name="from" id="datepicker-from" placeholder="Date From"/>
-                    <input name="to" id="datepicker-to" placeholder="Date To"/>
-                    <button id="send-request">Submit</button>
+                    <form>
+                    <div class="row">
+                        <div class="four columns">
+                            <label for="datepicker-from">Date From</label>
+                            <input type="text" class="u-full-width" name="from" id="datepicker-from" placeholder="18/06/2017"/>
+                        </div>
+                        <div class="four columns">
+                            <label for="datepicker-to">Date To</label>
+                            <input type="text" class="u-full-width" name="to" id="datepicker-to" placeholder="Date To"/>
+                        </div>
+                        <div class="four columns">
+                            <label for="holiday-type">Date To</label>
+                            <select class="u-full-width" id="holiday-type">
+                                <option value="holiday">Holiday</option>
+                                <option value="illness">Illness</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label for="holiday-message">Message</label>
+                    <textarea class="u-full-width" placeholder="Message ..." id="holiday-message"></textarea>
+                    <button class="button-primary u-pull-right" type="button" id="send-request">Submit</button>
+                    </form>
                 </div>
             </div>
 
-            <div class="container" id="container-2" style="display: none;">
-                <div class="box">
-                    <h3>Sending request...</h3>
-                </div>
-            </div>
-
-            <div class="box-down">
+            <div class="container box-down">
                 <p>View holiday requests</p>
                 <i class="icon-down-big" id="view-holiday"></i>
             </div>
         </div>
-        <div class="big-container" id="big-container-2" style="display: none;">
-            <div class="container">
-                <ul id="holiday-list-container">
 
-                </ul>
+        <div class="big-container" id="big-container-2" style="display: none;">
+            <div class="container" style="display: none;">
+                <h3>Sending request...</h3>
+            </div>
+        </div>
+
+        <div class="big-container" id="big-container-3" style="display: none;">
+            <div class="container" style="display: none;">
+                <div class="holiday-list-container"></div>
             </div>
         </div>
     {{/wrap}}

@@ -1,3 +1,17 @@
-        {{#each fixtures}}
-            <li>{{this.from}} - {{this.to}} - {{this.type}} - {{this.approved}}</li>
-        {{/each}}
+
+        <table class="u-full-width">
+            <thead>
+                <tr>
+                    <th>From</th><th>To</th><th>Type</th><th>Approved</th>
+                </ty>
+            </thead>
+            <tbody>
+            {{#each fixtures}}
+                <tr>
+                    <td>{{this.from}}</td><td>{{this.to}}</td><td>{{this.type}}</td><td>{{this.approved}}</td>
+                </tr>
+            {{/each}}
+            </tbody>
+        </table>
+
+        <p><a href="#" onclick="transition(1)">Go back</a></p>

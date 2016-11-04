@@ -22,7 +22,9 @@ utils.prepareAssets({
         'node_modules/jquery-ui-dist/jquery-ui.min.css'
     ],
     './public/css/app.css': [
-        'assets/css/app.css'
+        'assets/css/normalize.css',
+        'assets/css/app.css',
+        'assets/css/skeleton.css'
     ],
     './public/js/app.js': [
         'assets/js/app.js'
