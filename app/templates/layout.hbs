@@ -6,7 +6,8 @@
         <script src="/templates.js"></script>
         <link rel="stylesheet" type="text/css" href="/app.css" />
         <link rel="stylesheet" type="text/css" href="/fontello/css/fontello.css" />
-        <script>require('app');</script>
+        <script>window.$ = window.jQuery = require('jquery');</script>
+        <script>require('app'); console.log( 'require' );</script>
     </head>
     <body>
         {{{content}}}
