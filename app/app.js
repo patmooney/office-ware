@@ -1,7 +1,9 @@
-var $ = require('jquery');
-var jQuery = $;
-require('jquery-ui');
+var jQuery, $;
+jQuery = $ = require('jquery');
+
 var Handlebars = require('handlebars');
+require('jquery-ui/ui/widget');
+require('jquery-ui/ui/widgets/datepicker');
 
 var _transitionTime = 1000;
 var _currentScreen = 1;
