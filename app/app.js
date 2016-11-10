@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import Handlebars from 'handlebars';
+import holidayListTemplate from 'templates/holiday-list.hbs';
 import 'jquery-ui/ui/widgets/datepicker';
+import 'jquery-ui/ui/effect';
 
 $(function () {
     var _transitionTime = 1000;
@@ -34,9 +36,7 @@ $(function () {
             {
                 success: function ( data ){
                     $('.holiday-list-container').html(
-                        Handlebars.template(
-                            Handlebars.templates['holiday-list']
-                        )({ fixtures: data.data, hello: "sausage" })
+                        holidayListTemplate({ fixtures: data.data, hello: "sausage" })
                     );
                 }
             }
@@ -55,6 +55,7 @@ $(function () {
     };
 
     var transition = function ( to ) {
+        console.log( to, _currentScreen );
 
         if ( to == _currentScreen ) {
             return false;
@@ -62,24 +63,16 @@ $(function () {
 
         $('body').css({overflow: 'hidden'});
         if ( to > _currentScreen ){
-            $('#big-container-'+_currentScreen)
-                .toggle('slide', { direction: "up", duration: _transitionTime });
-            $('#big-container-'+to)
-                .toggle('slide', { direction: "down", duration: _transitionTime });
-            $('#big-container-'+to+' > div.container')
-                .fadeIn( _transitionTime );
-            $('#big-container-'+_currentScreen+' > div.container')
-                .fadeOut( _transitionTime );
+            $('#big-container-'+_currentScreen).animate({ top: "-150%" }, { duration: _transitionTime, queue: false } );
+            $('#big-container-'+_currentScreen).fadeOut( { duration: _transitionTime, queue: false } );
+            $('#big-container-'+to).animate({ top: '0%'}, { duration: _transitionTime, queue: false } );
+            $('#big-container-'+to).fadeIn( { duration: _transitionTime, queue: false } );
         }
         else {
-            $('#big-container-'+to)
-                .toggle('slide', { direction: "up", duration: _transitionTime });
-            $('#big-container-'+_currentScreen)
-                .toggle('slide', { direction: "down", duration: _transitionTime });
-            $('#big-container-'+to+' > div.container')
-                .fadeIn( _transitionTime );
-            $('#big-container-'+_currentScreen+' > div.container')
-                .fadeOut( _transitionTime );
+            $('#big-container-'+to).animate({ top: "0%" }, { duration: _transitionTime, queue: false } );
+            $('#big-container-'+to).fadeIn( { duration: _transitionTime, queue: false } );
+            $('#big-container-'+_currentScreen).animate({ top: '150%'}, { duration: _transitionTime, queue: false } );
+            $('#big-container-'+_currentScreen).fadeOut( { duration: _transitionTime, queue: false } );
         }
 
         setTimeout(function() {
@@ -88,4 +81,5 @@ $(function () {
 
         _currentScreen = to;
     };
+    window.makeTransition = transition;
 });

@@ -3,62 +3,120 @@ var utils = require('./lib/utils.js');
 var model = require('./lib/model.js');
 var hbs = require('handlebars');
 var cookieParser = require('cookie-parser');
+var randomstring = require("randomstring");
 
 var port = process.argv[2] || '3000';
 
-hbs.registerHelper('wrap', function ( context, options ) {
-    return templates[context]({
-        content: options.fn(this)
-    });
-});
-var templates = utils.compileTemplates( './app/templates' );
-
-var app = express();
-app.use(cookieParser('3uf93uf93ri02io-w2'));
-app.use('/', express.static('public'))
-
-app.authGet = function( route,  cb ) {
-    var wrap = function ( req, res ){
-        var user_id = req.signedCookies.user_id;
-
-        if ( user_id ){
-            console.log( 'got user id : ' + user_id );
-            return route == '/login' ?
-                    res.redirect('/') :
-                    cb( req, res, model.findUser( user_id ) );
-        }
-
-        if ( req.header('X-Requested-With') == 'XMLHttpRequest' ){
-            return res.status(401).end();
-        }
-
-        return route == '/login' ?
-            res.send( templates['login']() ) :
-            res.redirect('/login');
-    };
-    app.get(route, wrap);
-};
-
-app.authGet('/', function (req, res) {
-    res.send( templates['index']() );
-});
-
-app.authGet('/api/holiday', function (req, res) {
-    res.send( { data: model.fixtures } );
-});
-
-app.post('/api/holiday', function ( req, res ) {
-});
-
-app.authGet('/login',function (req, res) {
-    res.send( templates['login']() );
-});
-
-app.post('/login', function ( req, res ) {
-    res.cookie('user_id',1,{ signed: true });
-    res.redirect('/');
-});
-
-app.listen(port, function () {
+_initApp().listen(port, function () {
     console.log( 'Server started. PORT ' + port );
 });
+
+/*
+
+Node app
+
+Uses cookie encryption for session, handlebars for HTML,
+Sequelize for ORM, MailJet for email
+
+*/
+
+function _initApp() {
+    /* 
+        compile handlebars templates for server use
+        with a helper to use the main layout
+    */
+    hbs.registerHelper('wrap', function ( context, options ) {
+        return templates[context]({
+            content: options.fn(this)
+        });
+    });
+    var templates = utils.compileTemplates( './app/templates' );
+
+    var _appRoutes = {
+        get: {
+            '/login': function (req, res) {
+                var user_id = req.signedCookies.user_id;
+                if ( user_id ) {
+                    return res.redirect('/');
+                }
+                res.send( templates['login']() );
+            },
+        },
+        authGet: {
+            '/': function ( req, res ) { res.send( templates['index']() ); },
+        },
+        post: {
+            '/login': function ( req, res ) {
+                res.cookie('user_id',1,{ signed: true });
+                res.redirect('/');
+            }
+        }
+    };
+
+    var _apiRoutes = {
+        get: {
+            '/holiday': function ( req, res ) {
+                res.send( { data: model.fixtures } );
+            },
+        },
+        post: {
+            '/holiday': function ( req, res ) {
+            }
+        }
+    };
+
+    var app = _setupApp();
+    var api = express();
+
+    /* api routes need a session */
+    api.use(function ( req, res, next ){
+        return req.signedCookies.user_id ? next() : res.status(401).end();
+    });
+
+    /* register app routes */
+    Object.keys(_appRoutes).forEach( function ( method ) {
+        Object.keys(_appRoutes[method]).forEach( function ( route ) {
+            app[method](route,_appRoutes[method][route]);
+        });
+    });
+
+    /* register api routes */
+    Object.keys(_apiRoutes).forEach( function ( method ) {
+        Object.keys(_apiRoutes[method]).forEach( function ( route ) {
+            api[method](route,_apiRoutes[method][route]);
+        });
+    });
+
+    app.use( '/api', api );
+    return app;
+}
+
+function _setupApp () {
+    var app = express();
+
+    /* set static assets dir */
+    app.use('/', express.static('public'));
+
+    /* use encrypted cookies */
+    var cookieKey = process.env.APP_COOKIE_KEY || randomstring.generate();
+    app.use(cookieParser(cookieKey));
+
+    /* a hook for locking down specific routes */
+    app.authGet = function( route,  cb ) {
+        var wrap = function ( req, res ){
+
+            var user_id = req.signedCookies.user_id;
+
+            if ( user_id ){
+                // user id logged in, proceed
+                return cb( req, res, model.findUser( user_id ) );
+            }
+
+            // user is not logged in, go to login page
+            return res.redirect('/login');
+        };
+        app.get(route, wrap);
+    };
+
+    return app;
+}
