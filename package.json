@@ -7,10 +7,6 @@
     "type": "git",
     "url": ""
   },
-  "scripts": {
-    "start": "brunch watch --server",
-    "prod": "brunch build --production"
-  },
   "dependencies": {
     "cookie-parser": "^1.4.3",
     "express": "^4.14.0",

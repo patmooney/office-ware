@@ -22,6 +22,11 @@ module.exports = {
         ]
       }
     },
+    stylesheets: {
+        joinTo: {
+            'app.css': /^app/
+        }
+    },
     templates: {
         precompile: true,
         joinTo: 'templates.js'
