@@ -12,7 +12,7 @@ module.exports = {
   files: {
     javascripts: {
       joinTo: {
-        'vendor.js': function (path) { console.log( path ); return path.match(/^node_modules/) },
+        'vendor.js': /^node_modules/,
         'app.js': /^app/
       },
       order: {
