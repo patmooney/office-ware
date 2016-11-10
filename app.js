@@ -11,7 +11,6 @@ hbs.registerHelper('wrap', function ( context, options ) {
         content: options.fn(this)
     });
 });
-
 var templates = utils.compileTemplates( './app/templates' );
 
 var app = express();
@@ -63,5 +62,3 @@ app.post('/login', function ( req, res ) {
 app.listen(port, function () {
     console.log( 'Server started. PORT ' + port );
 });
-
-
