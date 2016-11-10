@@ -2,6 +2,8 @@
 var brunch = new require('brunch');
 var fs = require('fs-extra');
 
+console.log(process.cwd());
+
 brunch.build({});
 
 /* static dep images */
