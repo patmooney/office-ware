@@ -33,5 +33,7 @@
     "javascript-brunch": "^2.0.0",
     "uglify-js-brunch": "^2.0.0"
   },
-  "postinstall": "brunch build --optimize"
+  "scripts": {
+    "postinstall": "brunch build --optimize"
+  }
 }
