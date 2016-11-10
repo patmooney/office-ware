@@ -32,6 +32,6 @@
     "auto-reload-brunch": "^2.0.0"
   },
   "scripts": {
-    "postinstall": "scripts/post-install.js"
+    "postinstall": "brunch build -p; scripts/post-install.js"
   }
 }

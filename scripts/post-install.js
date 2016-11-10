@@ -1,10 +1,5 @@
 #!/usr/bin/env node
-var brunch = new require('brunch');
 var fs = require('fs-extra');
-
-brunch.build({});
-
-console.log( 'BRUNCH BUILDING' );
 
 /* static dep images */
 var images = [
@@ -21,5 +16,3 @@ images.forEach( function ( path ) {
     console.log( 'Copy image: ' + matches[1] );
     fs.copySync( path, imagePath+matches[1] );
 });
-
-console.log( 'finish' );
