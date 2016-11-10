@@ -3,7 +3,7 @@ var utils = require('./lib/utils.js');
 var model = require('./lib/model.js');
 var hbs = require('handlebars');
 var cookieParser = require('cookie-parser');
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 
 var port = process.argv[2] || '3000';
 
@@ -21,7 +21,7 @@ Sequelize for ORM, MailJet for email
 */
 
 function _initApp() {
-    /* 
+    /*
         compile handlebars templates for server use
         with a helper to use the main layout
     */
@@ -35,12 +35,16 @@ function _initApp() {
     var _appRoutes = {
         get: {
             '/login': function (req, res) {
-                var user_id = req.signedCookies.user_id;
-                if ( user_id ) {
-                    return res.redirect('/');
-                }
-                res.send( templates['login']() );
+                return req.signedCookies.user_id ?
+                    res.redirect('/') :
+                    res.send( templates['login']() );
             },
+            '/admin': function( req, res ) {
+                if ( ! req.signedCookies.is_admin ){
+                    return res.send( templates['admin-unauthorised']() );
+                }
+                return res.send( templates['admin']() );
+            }
         },
         authGet: {
             '/': function ( req, res ) { res.send( templates['index']() ); },

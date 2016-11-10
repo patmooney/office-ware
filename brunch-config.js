@@ -3,10 +3,16 @@ module.exports = {
       watched: [ 'app' ],
       public: './public'
   },
+  npm: {
+    styles: {
+        // the css file path is relative to node_modules/$module_name/
+        'jquery-ui': ['themes/base/core.css','themes/base/theme.css','themes/base/datepicker.css']
+    }
+  },
   files: {
     javascripts: {
       joinTo: {
-        'vendor.js': /^node_modules/,
+        'vendor.js': function (path) { console.log( path ); return path.match(/^node_modules/) },
         'app.js': /^app/
       },
       order: {
@@ -17,7 +23,8 @@ module.exports = {
     },
     stylesheets: {
         joinTo: {
-            'app.css': /^app/
+            'app.css': /^app/,
+            'vendor.css': /^node_modules/
         }
     },
     templates: {
@@ -25,10 +32,9 @@ module.exports = {
         joinTo: 'templates.js'
     }
   },
-
   plugins: {
     babel: {
-        presets: ['es2015','es2016'],
+        presets: ['es2015'],
         ignore: [/node_modules/]
     },
     handlebars: {}

@@ -1,4 +1,4 @@
-body {
+body, html {
     font-family: arial;
     color: #222;
 }
@@ -6,6 +6,9 @@ html, body {
     margin: 0px;
     padding: 0px;
     height: 100%;
+}
+html {
+    background-color: #f9f9f3;
 }
 
 div#login-admin {
@@ -18,13 +21,12 @@ div#login-admin {
 }
 
 div.box {
-    border: solid 1px #e7e7e7;
-    background-color: #f7f7f7;
+    border: solid 1px #efefef;
+    background-color: white;
     padding: 20px;
 }
 div.box > h2 {
-    margin: 10px;
-    font-size: 40px;
+    font-size: 60px;
 }
 div.box-down {
     font-size: 50px;
