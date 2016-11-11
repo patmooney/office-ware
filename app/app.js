@@ -10,7 +10,6 @@ $(function () {
     var router = new Navigo( null, true ); // root, useHash
 
     var _transitionTime = 1000;
-    var _currentScreen = "1-request";
     var _pageLoad = true;
 
     $( "#view-holiday" ).click( function () {
@@ -22,14 +21,14 @@ $(function () {
 
     $( "#datepicker-from, #datepicker-to" ).datepicker();
     $( "#send-request" ).click( function () {
-        transition( "2-sending" );
+        transition( "sending" );
         submitRequest(
             function ( data ) {
                 refreshHoliday();
-                transition(3);
+                transition("current");
             },
             function ( aj, stat, err ){
-                $('#big-container-2 > div').html(
+                $('#view-container-2 > div').html(
                     "<h3>"+err+"</h3>" +
                     "<p>Something bad has happened, <a href='#' onclick='makeTransition(\"view\")'>go back</a>"
                 );
@@ -62,15 +61,17 @@ $(function () {
     };
 
     /* 
-        all ".big-containers" are assigned a data-view attribute, then transitions
+        all ".view-container" are assigned a data-view attribute, then transitions
         are based on their current location.
         when the page first loads, the order is arranged so the first screen
     */
-    var transition = function ( to ) {
+    var transition = function ( view ) {
         var slideTime = _pageLoad ? 0 : _transitionTime;
         var fadeTime = _transitionTime + 200;
-        var $current = $(`.big-container[data-view="${_currentScreen}"]`);
-        var $to = $(`.big-container[data-view="${to}"]`);
+        var _currentScreen = window._view_current;
+        var $current = $(`.view-container[data-view-n="${_currentScreen}"]`);
+        var $to = $(`.view-container[data-view="${view}"]`);
+        var to = $to.attr('data-view-n');
 
         // where the 'current' view should end up
         var curAnim = to > _currentScreen ? { top: "-150%" } : { top: '150%' };
@@ -94,13 +95,14 @@ $(function () {
             $current.animate(curAnim, { duration: slideTime, queue: false });
             $current.fadeOut( { duration: fadeTime, queue: false } );
         }
+
         if ( $to ) {
             $to.css(toAnim);
             $to.animate({ top: "0%" }, { duration: slideTime, queue: false } );
             $to.fadeIn( { duration: fadeTime, queue: false } );
         }
 
-        _currentScreen = to;
+        window._view_current = to;
     };
 
     var showHolidayRequest = function(){
@@ -111,14 +113,24 @@ $(function () {
 
     router.on({
         '/': function () {
-            transition('1-request');
+            transition('request');
             return showHolidayRequest();
         },
         '/holiday': function () {
-            transition('3-current');
+            transition('current');
             return showCurrentHoliday();
         }
     }).resolve();
+
+
+    // set up view ordering
+    (function () {
+        var count = 1;
+        $('.view-container').each( function ( _, el ) {
+            $(el).attr('data-view-n',count);
+            count++;
+        });
+    })();
 
     window.makeTransition = transition;
 });
