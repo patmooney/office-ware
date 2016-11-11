@@ -37,6 +37,9 @@ module.exports = {
         presets: ['es2015'],
         ignore: [/node_modules/]
     },
-    handlebars: {}
+    handlebars: {},
+    sass: {
+        mode: 'native'
+    }
   }
 };

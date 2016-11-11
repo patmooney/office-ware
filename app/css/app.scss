@@ -1,11 +1,9 @@
-body, html {
-    font-family: arial;
-    color: #222;
-}
 html, body {
     margin: 0px;
     padding: 0px;
     height: 100%;
+    color: #222;
+    font-size: 13px;
 }
 html {
     background-color: #f9f9f3;
@@ -24,19 +22,22 @@ div.box {
     border: solid 1px #efefef;
     background-color: white;
     padding: 20px;
+
+    h2 {
+        font-size: 60px;
+    }
 }
-div.box > h2 {
-    font-size: 60px;
-}
+
 div.box-down {
     font-size: 50px;
     color: #5a5a5a;
     text-align: center;
     margin-top: 40px;
-}
-div.box-down > p {
-    font-size: 16px;
-    margin: 0px;
+
+    p {
+        font-size: 16px;
+        margin: 0px;
+    }
 }
 div.big-container {
     width: 100%;
@@ -52,3 +53,9 @@ i#view-holiday {
 div.container {
     margin-top: 30px;
 }
+
+div.login-register-link {
+    padding-top: 5px;
+}
+
+@-ms-viewport { width: device-width; }
