@@ -60,7 +60,7 @@ $(function () {
         );
     };
 
-    /* 
+    /*
         all ".view-container" are assigned a data-view attribute, then transitions
         are based on their current location.
         when the page first loads, the order is arranged so the first screen
@@ -68,24 +68,24 @@ $(function () {
     var transition = function ( view ) {
         var slideTime = _pageLoad ? 0 : _transitionTime;
         var fadeTime = _transitionTime + 200;
-        var _currentScreen = window._view_current;
-        var $current = $(`.view-container[data-view-n="${_currentScreen}"]`);
+        var currentScreen = window._view_current;
+        var $current = $(`.view-container[data-view-n="${currentScreen}"]`);
         var $to = $(`.view-container[data-view="${view}"]`);
         var to = $to.attr('data-view-n');
 
         // where the 'current' view should end up
-        var curAnim = to > _currentScreen ? { top: "-150%" } : { top: '150%' };
+        var curAnim = to > currentScreen ? { top: "-150%" } : { top: '150%' };
         // where the 'to' view should being
-        var toAnim = to > _currentScreen ? { top: "150%" } : { top: '-150%' };
+        var toAnim = to > currentScreen ? { top: "150%" } : { top: '-150%' };
 
         if ( _pageLoad ) {
             _pageLoad = false;
             slideTime = 0;
         }
-        else if ( to == _currentScreen ) {
+        else if ( to == currentScreen ) {
             return false;
         }
-        
+
         $('body').css({overflow: 'hidden'});
         setTimeout(function() {
             $('body').css({overflow: 'auto'});
@@ -111,6 +111,16 @@ $(function () {
         refreshHoliday();
     };
 
+    // set up view ordering
+    (function () {
+        var count = 1;
+        $('.view-container').each( function ( _, el ) {
+            $(el).attr('data-view-n',count);
+            $(el).css({ top: '150%', display: "none" });
+            count++;
+        });
+    })();
+
     router.on({
         '/': function () {
             transition('request');
@@ -121,16 +131,6 @@ $(function () {
             return showCurrentHoliday();
         }
     }).resolve();
-
-
-    // set up view ordering
-    (function () {
-        var count = 1;
-        $('.view-container').each( function ( _, el ) {
-            $(el).attr('data-view-n',count);
-            count++;
-        });
-    })();
 
     window.makeTransition = transition;
 });
