@@ -21,9 +21,9 @@ export default class {
         var to = $to.attr('data-view-n');
 
         // where the 'current' view should end up
-        var curAnim = to > currentScreen ? { top: "-150%" } : { top: '150%' };
+        var curAnim = to > currentScreen ? { top: "-110%" } : { top: '110%' };
         // where the 'to' view should being
-        var toAnim = to > currentScreen ? { top: "150%" } : { top: '-150%' };
+        var toAnim = to > currentScreen ? { top: "110%" } : { top: '-110%' };
 
         if ( this._pageLoad ) {
             this._pageLoad = false;
@@ -55,10 +55,16 @@ export default class {
     // set up view ordering
     setup () {
         var count = 1;
+        var _this = this;
         $('.view-container').each( function ( _, el ) {
             $(el).attr('data-view-n',count);
-            $(el).css({ top: '150%', display: "none" });
+            $(el).css({ top: '110%', display: "none" });
             count++;
         });
+        $('a[data-view]').each( ( _, el ) => {
+            $(el).click( () => { _this.transition( $(el).attr('data-view') ); } );
+        });
+        // load first view
+        this.transition($(`.view-container[data-view-n="1"]`).attr('data-view'));
     }
 };
