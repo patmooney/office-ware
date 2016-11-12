@@ -34,7 +34,7 @@ module.exports = {
   },
   plugins: {
     babel: {
-        presets: ['es2015'],
+        presets: ['es2015','es2016'],
         ignore: [/node_modules/]
     },
     handlebars: {},
