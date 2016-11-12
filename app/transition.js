@@ -1,12 +1,23 @@
 import $ from 'jquery';
+import Navigo from 'navigo';
+import Handlebars from 'handlebars';
+
+var _defaults = {
+    transitionTime: 1000,
+    _pageLoad: true
+};
 
 export default class {
-    constructor( transitionTime ){
-        this.transitionTime = ( transitionTime === undefined ) ?
-            1000 :
-            transitionTime;
-        this._pageLoad = true;
+
+    constructor( options = {} ){
+        var _this = this;
+        Object.keys( _defaults ).forEach( key => {
+            _this[key] = options[key] === undefined ?
+                _defaults[key] :
+                options[key];
+        });
     }
+
     /*
         all ".view-container" are assigned a data-view attribute, then transitions
         are based on their current location.
@@ -53,18 +64,46 @@ export default class {
     }
 
     // set up view ordering
-    setup () {
+    init ( routeOptions ) {
         var count = 1;
         var _this = this;
+        var routes = {};
+
         $('.view-container').each( function ( _, el ) {
             $(el).attr('data-view-n',count);
             $(el).css({ top: '110%', display: "none" });
+
+            var view = $(el).attr('data-view');
+            var opts = routeOptions[view] || {};
+
+            var template = opts.template || `templates/subviews/${view}.hbs`;
+            var t = require(template);
+            $(el).html(
+                t( opts.options === undefined ? {} : opts.options )
+            );
+
+            var routerFunc = function () {
+                _this.transition(view);
+                if ( opts.callback !== undefined ){
+                    opts.callback();
+                }
+            };
+            routes[`/${view}`] = routerFunc;
+            if ( count === 1 ){
+                routes['/'] = routerFunc;
+            }
+
+            $(`a[data-view="${view}"]`).each( ( _, el ) => {
+                $(el).click( e => {
+                    e.preventDefault();
+                    router.navigate(`/${view}`);
+                });
+            });
+
             count++;
         });
-        $('a[data-view]').each( ( _, el ) => {
-            $(el).click( () => { _this.transition( $(el).attr('data-view') ); } );
-        });
-        // load first view
-        this.transition($(`.view-container[data-view-n="1"]`).attr('data-view'));
+
+        var router = new Navigo( null, true ); // root, useHash
+        router.on(routes).resolve();
     }
 };

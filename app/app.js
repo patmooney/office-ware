@@ -1,23 +1,11 @@
 import $ from 'jquery';
 import Handlebars from 'handlebars';
-import holidayListTemplate from 'templates/holiday-list.hbs';
+import holidayListTemplate from 'templates/subviews/holiday-list.hbs';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/ui/effect';
-import Navigo from 'navigo';
 import Transition from 'transition';
 
 $(function () {
-
-    var transition = new Transition();
-    transition.setup();
-
-    $( "#view-holiday" ).click( () => {
-        router.navigate('/holiday');
-    });
-    $( "#go-back" ).click( () => {
-        router.navigate('/');
-    });
-
     $( "#datepicker-from, #datepicker-to" ).datepicker();
     $( "#send-request" ).click( () => {
         transition( "sending" );
@@ -59,21 +47,10 @@ $(function () {
         );
     };
 
-    var showHolidayRequest = function(){
-    };
-    var showCurrentHoliday = function(){
-        refreshHoliday();
-    };
-
-    var router = new Navigo( null, true ); // root, useHash
-    router.on({
-        '/': () => {
-            transition.transition('request');
-            return showHolidayRequest();
-        },
-        '/holiday': () => {
-            transition.transition('current');
-            return showCurrentHoliday();
+    var transition = new Transition();
+    transition.init({
+        'current': {
+            callback: function () { refreshHoliday(); }
         }
-    }).resolve();
+    });
 });
