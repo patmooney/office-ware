@@ -1,0 +1,35 @@
+
+<div class="container">
+    <div class="box">
+        <h2>Holiday Request</h2>
+        <form>
+        <div class="row">
+            <div class="four columns">
+                <label for="datepicker-from">Date From</label>
+                <input type="text" class="u-full-width" name="from" id="datepicker-from" placeholder="18/06/2017"/>
+            </div>
+            <div class="four columns">
+                <label for="datepicker-to">Date To</label>
+                <input type="text" class="u-full-width" name="to" id="datepicker-to" placeholder="Date To"/>
+            </div>
+            <div class="four columns">
+                <label for="holiday-type">Date To</label>
+                <select class="u-full-width" id="holiday-type">
+                    <option value="holiday">Holiday</option>
+                    <option value="illness">Illness</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+        <label for="holiday-message">Message</label>
+        <textarea class="u-full-width" placeholder="Message ..." id="holiday-message"></textarea>
+        <button class="button-primary u-pull-right" type="button" id="send-request">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div class="container box-down">
+    <p>View holiday requests</p>
+    <i class="icon-down-big" id="view-holiday"></i>
+</div>
+

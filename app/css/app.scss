@@ -58,4 +58,10 @@ div.login-register-link {
     padding-top: 5px;
 }
 
+input.warning {
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(255,0,0,1) !important;
+    -moz-box-shadow: 0px 0px 10px 0px rgba(255,0,0,1) !important;
+    box-shadow: 0px 0px 10px 0px rgba(255,0,0,1) !important;
+}
+
 @-ms-viewport { width: device-width; }

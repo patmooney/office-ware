@@ -63,8 +63,17 @@ export default class {
         window._view_current = to;
     }
 
+    /*
+        routeOptions: {
+            '$view_name': {
+                options: ... options for template ...
+                callback: function () { ... i get called when the view is transition to ... }
+            }
+        }
+    */
+
     // set up view ordering
-    init ( routeOptions ) {
+    init ( routeOptions = {} ) {
         var count = 1;
         var _this = this;
         var routes = {};
@@ -74,31 +83,40 @@ export default class {
             $(el).css({ top: '110%', display: "none" });
 
             var view = $(el).attr('data-view');
+            var template = $(el).attr('data-template');
+
+            // if the view name begins with an underscore then there is no template
             var opts = routeOptions[view] || {};
 
-            var template = opts.template || `templates/subviews/${view}.hbs`;
-            var t = require(template);
-            $(el).html(
-                t( opts.options === undefined ? {} : opts.options )
-            );
-
-            var routerFunc = function () {
-                _this.transition(view);
-                if ( opts.callback !== undefined ){
-                    opts.callback();
-                }
-            };
-            routes[`/${view}`] = routerFunc;
-            if ( count === 1 ){
-                routes['/'] = routerFunc;
+            if ( template ) {
+                var template = `templates/${template}.hbs`;
+                var t = require(template);
+                $(el).html(
+                    t( opts.options === undefined ? {} : opts.options )
+                );
             }
 
-            $(`a[data-view="${view}"]`).each( ( _, el ) => {
-                $(el).click( e => {
-                    e.preventDefault();
-                    router.navigate(`/${view}`);
+            // if view begins with underscore then no routing
+            if ( ! view.match(/^_/) ){
+                var routerFunc = function () {
+                    _this.transition(view);
+                    if ( opts.callback !== undefined ){
+                        opts.callback();
+                    }
+                };
+
+                routes[`/${view}`] = routerFunc;
+                if ( count === 1 ){
+                    routes['/'] = routerFunc;
+                }
+
+                $(`a[data-view="${view}"]`).each( ( _, el ) => {
+                    $(el).click( e => {
+                        e.preventDefault();
+                        router.navigate(`/${view}`);
+                    });
                 });
-            });
+            }
 
             count++;
         });
@@ -106,4 +124,5 @@ export default class {
         var router = new Navigo( null, true ); // root, useHash
         router.on(routes).resolve();
     }
+
 };

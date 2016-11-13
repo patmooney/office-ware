@@ -1,6 +1,4 @@
 import $ from 'jquery';
-import Handlebars from 'handlebars';
-import holidayListTemplate from 'templates/subviews/holiday-list.hbs';
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/ui/effect';
 import Transition from 'transition';

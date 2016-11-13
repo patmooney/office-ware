@@ -53,6 +53,9 @@ function _initApp() {
             '/login': function ( req, res ) {
                 res.cookie('user_id',1,{ signed: true });
                 res.redirect('/');
+            },
+            '/register': function ( req, res ) {
+                console.log( req );
             }
         }
     };
