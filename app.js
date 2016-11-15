@@ -55,7 +55,16 @@ function _initApp() {
                 res.redirect('/');
             },
             '/register': function ( req, res ) {
-                console.log( req );
+                model.addUser( req.params ).then(
+                    function ( user ){
+                        console.log( user );
+                        res.cookie('user_id',user.id,{ signed: true });
+                        res.status(200).send({ message: "OK" });
+                    },
+                    function ( error ){
+                        res.status(400).send({ error: error });
+                    }
+                );
             }
         }
     };
