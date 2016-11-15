@@ -1,9 +1,16 @@
-var express = require('express');
-var utils = require('./lib/utils.js');
-var user = require('./lib/user.js');
-var hbs = require('handlebars');
-var cookieParser = require('cookie-parser');
-var randomstring = require('randomstring');
+'use strict';
+
+const express = require('express');
+const utils = require('./lib/utils');
+const user = require('./lib/user');
+const hbs = require('handlebars');
+const cookieParser = require('cookie-parser');
+const randomstring = require('randomstring');
+
+const _uC = require('lib/controller/user');
+const userController = new _uC({
+    userModel: user
+});
 
 var port = process.argv[2] || '3000';
 
@@ -32,13 +39,21 @@ function _initApp() {
     });
     var templates = utils.compileTemplates( './app/templates' );
 
+    var app = _setupApp();
+
+    app.authGet( '/', function ( req, res ) {
+        res.send( templates['index']() );
+    });
+
+    /* user routes */
+    app.get( '/register', userController.register );
+    app.post( '/register', userController.registerSubmit );
+    app.get( '/login', userControlller.login );
+    app.post( '/login', userController.loginSubmit );
+
+    
     var _appRoutes = {
         get: {
-            '/login': function (req, res) {
-                return req.signedCookies.user_id ?
-                    res.redirect('/') :
-                    res.send( templates['login']() );
-            },
             '/admin': function( req, res ) {
                 if ( ! req.signedCookies.is_admin ){
                     return res.send( templates['admin-unauthorised']() );
@@ -49,24 +64,6 @@ function _initApp() {
         authGet: {
             '/': function ( req, res ) { res.send( templates['index']() ); },
         },
-        post: {
-            '/login': function ( req, res ) {
-                res.cookie('user_id',1,{ signed: true });
-                res.redirect('/');
-            },
-            '/register': function ( req, res ) {
-                user.addUser( req.params ).then(
-                    function ( user ){
-                        console.log( user );
-                        res.cookie('user_id',user.id,{ signed: true });
-                        res.status(200).send({ message: "OK" });
-                    },
-                    function ( error ){
-                        res.status(400).send({ error: error });
-                    }
-                );
-            }
-        }
     };
 
     var _apiRoutes = {
@@ -81,27 +78,7 @@ function _initApp() {
         }
     };
 
-    var app = _setupApp();
     var api = express();
-
-    /* api routes need a session */
-    api.use(function ( req, res, next ){
-        return req.signedCookies.user_id ? next() : res.status(401).end();
-    });
-
-    /* register app routes */
-    Object.keys(_appRoutes).forEach( function ( method ) {
-        Object.keys(_appRoutes[method]).forEach( function ( route ) {
-            app[method](route,_appRoutes[method][route]);
-        });
-    });
-
-    /* register api routes */
-    Object.keys(_apiRoutes).forEach( function ( method ) {
-        Object.keys(_apiRoutes[method]).forEach( function ( route ) {
-            api[method](route,_apiRoutes[method][route]);
-        });
-    });
 
     app.use( '/api', api );
     return app;
@@ -118,20 +95,35 @@ function _setupApp () {
     app.use(cookieParser(cookieKey));
 
     /* a hook for locking down specific routes */
-    app.authGet = function( route,  cb ) {
-        var wrap = function ( req, res ){
-
-            var user_id = req.signedCookies.user_id;
-
-            if ( user_id ){
-                // user id logged in, proceed
-                return cb( req, res, user.find( user_id ) );
-            }
-
-            // user is not logged in, go to login page
-            return res.redirect('/login');
-        };
-        app.get(route, wrap);
+    var authRouteError = function ( req, res ) {
+        if ( req.header('X-Requested-With') === 'XMLHttpRequest' ){
+            return res.status(401).send('Unauthorised');
+        }
+        return res.redirect('/login');
+    };
+    var authRoute = function ( req, res, cb ){
+        var user_id = req.signedCookies.user_id;
+        if ( user_id ){
+            user.find({ user_id: user_id }).then(
+                function ( user ) {
+                    req.user = user;
+                    // user id logged in, proceed
+                    return cb( req, res ); // using middleware seems overkill
+                },
+                function () {
+                    return authRouteError( req, res );
+                }
+            );
+        }
+        return authRouteError( req, res );
+    };
+    app.auth = {
+        post: function( route,  cb ) { 
+            app.post( route, function( req, res ) { authRoute( req, res, cb ); } );
+        },
+        get: function( route,  cb ) { 
+            app.get( route, function( req, res ) { authRoute( req, res, cb ); } );
+        }
     };
 
     return app;

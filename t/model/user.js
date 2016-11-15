@@ -6,7 +6,7 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 process.env.DATABASE_URL="sqlite::memory:";
 
-describe('User - UserService (using sequelizeMockingMocha) - ', function () {
+describe('User - add - ', function () {
     const UserService = require('../../lib/user');
     const UserModel = require('../../lib/user/model');
  
@@ -30,11 +30,10 @@ describe('User - UserService (using sequelizeMockingMocha) - ', function () {
             return UserService.add({ firstname: 'john', lastname: 'smith', email: 'john@example.com', password: '12345678' })
                 .then(
                     function (user) {
-                        console.log( user );
-                        assert.equal( user.id, 1 );
+                        assert(false,'Should have not added new user');
                     },
                     function (error) {
-                        console.log( error );
+                        assert.ok( error.match(/Email already/) );
                     }
                 );
         });
