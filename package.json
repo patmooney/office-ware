@@ -31,7 +31,9 @@
     "uglify-js-brunch": "^2.0.0"
   },
   "devDependencies": {
-    "auto-reload-brunch": "^2.0.0"
+    "auto-reload-brunch": "^2.0.0",
+    "mocha": "^3.1.2",
+    "sqlite3": "^3.1.8"
   },
   "scripts": {
     "postinstall": "brunch build -p; scripts/post-install.js"

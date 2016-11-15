@@ -1,6 +1,6 @@
 var express = require('express');
 var utils = require('./lib/utils.js');
-var model = require('./lib/model.js');
+var user = require('./lib/user.js');
 var hbs = require('handlebars');
 var cookieParser = require('cookie-parser');
 var randomstring = require('randomstring');
@@ -55,7 +55,7 @@ function _initApp() {
                 res.redirect('/');
             },
             '/register': function ( req, res ) {
-                model.addUser( req.params ).then(
+                user.addUser( req.params ).then(
                     function ( user ){
                         console.log( user );
                         res.cookie('user_id',user.id,{ signed: true });
@@ -72,7 +72,7 @@ function _initApp() {
     var _apiRoutes = {
         get: {
             '/holiday': function ( req, res ) {
-                res.send( { data: model.fixtures } );
+                res.send( { data: user.fixtures } );
             },
         },
         post: {
@@ -125,7 +125,7 @@ function _setupApp () {
 
             if ( user_id ){
                 // user id logged in, proceed
-                return cb( req, res, model.findUser( user_id ) );
+                return cb( req, res, user.find( user_id ) );
             }
 
             // user is not logged in, go to login page
