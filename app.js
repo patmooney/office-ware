@@ -2,30 +2,27 @@
 
 const express = require('express');
 const utils = require('./lib/utils');
-import user from './lib/user';
-console.log( user );
-const holiday = require('./lib/holiday');
-import organisation from './lib/organisation';
 const hbs = require('handlebars');
 const cookieParser = require('cookie-parser');
 const randomstring = require('randomstring');
 import bodyParser from 'body-parser';
 
+import user from './lib/user';
+import organisation from './lib/organisation';
+import holiday from './lib/holiday';
 import _uC from './lib/controller/user';
-const userController = new _uC({
-    user: user
-});
-
-var _hC = require('./lib/controller/holiday').controller;
-const holidayController = new _hC({
-    holiday: holiday
-});
-
 import _oC from './lib/controller/organisation';
-const orgController = new _oC({
+import _hC from './lib/controller/holiday';
+
+const schema = {
+    user: user,
     organisation: organisation,
-    user: user
-});
+    holiday: holiday
+};
+
+const userController = new _uC(schema);
+const holidayController = new _hC(schema);
+const orgController = new _oC(schema);
 
 var port = process.env.PORT || '3000';
 
@@ -65,11 +62,11 @@ function _initApp() {
         }
         return res.send(templates['login']());
     });
-    app.post( '/login', (req,res) => { userController.loginSubmit(req,res) } );
+    app.post( '/login', (req,res) => { userController.login(req,res) } );
 
     /* app routes */
-    app.auth.get( '/', (req,res,user) => { holidayController.request(req,res,user) } );
-    app.auth.get( '/admin', (req,res,user) => { orgController.admin(req,res,user) } );
+    app.auth.get( '/', (req,res) => { holidayController.request(req,res) } );
+    app.auth.get( '/admin', (req,res) => { orgController.admin(req,res) } );
 
     /* admin routes */
     app.post('/organisation', (req,res) => { orgController.register(req,res) } );
@@ -100,7 +97,7 @@ function _setupApp () {
     var authRoute = function ( req, res, cb ){
         var user_id = req.signedCookies.user_id;
         if ( user_id ){
-            user.find({ user_id: user_id }).then(
+            return user.find( user_id ).then(
                 function ( user ) {
                     req.user = user;
                     // user id logged in, proceed
