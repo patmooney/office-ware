@@ -2,30 +2,32 @@
 
 const express = require('express');
 const utils = require('./lib/utils');
-const user = require('./lib/user');
+import user from './lib/user';
+console.log( user );
 const holiday = require('./lib/holiday');
-const organisation = require('./lib/organisation');
+import organisation from './lib/organisation';
 const hbs = require('handlebars');
 const cookieParser = require('cookie-parser');
 const randomstring = require('randomstring');
+import bodyParser from 'body-parser';
 
-const _uC = require('lib/controller/user');
+import _uC from './lib/controller/user';
 const userController = new _uC({
-    userModel: user
+    user: user
 });
 
-const _hC = require('lib/controller/holiday');
+var _hC = require('./lib/controller/holiday').controller;
 const holidayController = new _hC({
-    holidayModel: holiday
+    holiday: holiday
 });
 
-const _oC = require('lib/controller/organisation');
+import _oC from './lib/controller/organisation';
 const orgController = new _oC({
-    organisationModel: organisation,
-    userModel: user
+    organisation: organisation,
+    user: user
 });
 
-var port = process.argv[2] || '3000';
+var port = process.env.PORT || '3000';
 
 _initApp().listen(port, function () {
     console.log( 'Server started. PORT ' + port );
@@ -54,17 +56,23 @@ function _initApp() {
 
     var app = _setupApp();
 
-    app.authGet( '/', function ( req, res ) {
-        res.send( templates['index']() );
-    });
-
     /* user routes */
-    app.get( '/register', userController.register );
-    app.post( '/register', userController.registerSubmit );
-    app.get( '/login', userControlller.login );
-    app.post( '/login', userController.loginSubmit );
+    app.get( '/register', (req,res) => { userController.register(req,res) } );
+    app.post( '/register', (req,res) => { userController.registerDetails(req,res) } );
+    app.get( '/login', (req,res) => {
+        if ( req.signedCookies.user_id ) {
+            return res.redirect('/');
+        }
+        return res.send(templates['login']());
+    });
+    app.post( '/login', (req,res) => { userController.loginSubmit(req,res) } );
 
-    app.auth.get( '/', holidayController.request );
+    /* app routes */
+    app.auth.get( '/', (req,res,user) => { holidayController.request(req,res,user) } );
+    app.auth.get( '/admin', (req,res,user) => { orgController.admin(req,res,user) } );
+
+    /* admin routes */
+    app.post('/organisation', (req,res) => { orgController.register(req,res) } );
 
     return app;
 }
@@ -74,6 +82,9 @@ function _setupApp () {
 
     /* set static assets dir */
     app.use('/', express.static('public'));
+
+    /* handle post params */
+    app.use(bodyParser.json());
 
     /* use encrypted cookies */
     var cookieKey = process.env.APP_COOKIE_KEY || randomstring.generate();

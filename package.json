@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "babel-brunch": "~6.0.0",
-    "babel-preset-es2015": "~6.3.13",
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-2": "^6.18.0",
+    "body-parser": "^1.15.2",
     "brunch": "^2.4.0",
     "clean-css-brunch": "^2.0.0",
     "cookie-parser": "^1.4.3",
@@ -37,6 +40,7 @@
     "sqlite3": "^3.1.8"
   },
   "scripts": {
-    "postinstall": "brunch build -p; scripts/post-install.js"
+    "postinstall": "brunch build -p; scripts/post-install.js",
+    "start": "babel-node app.js --presets es2015,stage-2"
   }
 }

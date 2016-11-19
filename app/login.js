@@ -59,16 +59,17 @@ $(function () {
         return values;
     };
 
-    var submitRequest = function ( form, cb, err ) {
-        var values = validateForm( form );
+    var submitRequest = function ( opts, cb, err ) {
+        var values = validateForm( opts.form );
         if ( values ) {
             return jQuery.ajax(
-                `/${form}`,
+                opts.url,
                 {
-                    data: values,
-                    method: 'POST',
+                    data: JSON.stringify(values),
+                    method: opts.method || 'POST',
                     success: cb,
-                    error: err
+                    error: err,
+                    contentType: 'application/json'
                 }
             );
         }
@@ -78,7 +79,12 @@ $(function () {
     transition.init();
 
     $('button#register').click( () => {
-        submitRequest( 'register',
+        submitRequest(
+            {
+                form: 'organisation',
+                url: '/organisation',
+                method: 'POST',
+            },
             function (){
                 window.location = '/admin';
             },
@@ -89,7 +95,12 @@ $(function () {
     });
 
     $('button#login').click( () => {
-        submitRequest( 'login',
+        submitRequest(
+            {
+                form: 'login',
+                url: '/login',
+                method: 'POST'
+            },
             function (){
                 window.location = '/';
             },
