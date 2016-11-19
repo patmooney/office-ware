@@ -3,12 +3,25 @@
 const express = require('express');
 const utils = require('./lib/utils');
 const user = require('./lib/user');
+const holiday = require('./lib/holiday');
+const organisation = require('./lib/organisation');
 const hbs = require('handlebars');
 const cookieParser = require('cookie-parser');
 const randomstring = require('randomstring');
 
 const _uC = require('lib/controller/user');
 const userController = new _uC({
+    userModel: user
+});
+
+const _hC = require('lib/controller/holiday');
+const holidayController = new _hC({
+    holidayModel: holiday
+});
+
+const _oC = require('lib/controller/organisation');
+const orgController = new _oC({
+    organisationModel: organisation,
     userModel: user
 });
 
@@ -51,36 +64,8 @@ function _initApp() {
     app.get( '/login', userControlller.login );
     app.post( '/login', userController.loginSubmit );
 
-    
-    var _appRoutes = {
-        get: {
-            '/admin': function( req, res ) {
-                if ( ! req.signedCookies.is_admin ){
-                    return res.send( templates['admin-unauthorised']() );
-                }
-                return res.send( templates['admin']() );
-            }
-        },
-        authGet: {
-            '/': function ( req, res ) { res.send( templates['index']() ); },
-        },
-    };
+    app.auth.get( '/', holidayController.request );
 
-    var _apiRoutes = {
-        get: {
-            '/holiday': function ( req, res ) {
-                res.send( { data: user.fixtures } );
-            },
-        },
-        post: {
-            '/holiday': function ( req, res ) {
-            }
-        }
-    };
-
-    var api = express();
-
-    app.use( '/api', api );
     return app;
 }
 
@@ -118,10 +103,10 @@ function _setupApp () {
         return authRouteError( req, res );
     };
     app.auth = {
-        post: function( route,  cb ) { 
+        post: function( route,  cb ) {
             app.post( route, function( req, res ) { authRoute( req, res, cb ); } );
         },
-        get: function( route,  cb ) { 
+        get: function( route,  cb ) {
             app.get( route, function( req, res ) { authRoute( req, res, cb ); } );
         }
     };
