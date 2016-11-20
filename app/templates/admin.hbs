@@ -1,3 +1,11 @@
     {{#wrap 'layout'}}
-        WELCOME ADMIN
+        <script>require('admin');</script>
+        <div class="view-container"
+            data-view="unauthorised"
+            data-template="admin/unauthorised"
+        />
+        <div class="view-container"
+            data-view="users"
+            data-template="admin/users"
+        />
     {{/wrap}}

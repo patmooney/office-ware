@@ -78,7 +78,10 @@ export default class {
         var _this = this;
         var routes = {};
 
+        console.log( 'init' );
+
         $('.view-container').each( function ( _, el ) {
+            console.log( el );
             $(el).attr('data-view-n',count);
             $(el).css({ top: '110%', display: "none" });
 

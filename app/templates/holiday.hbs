@@ -1,5 +1,5 @@
     {{#wrap 'layout'}}
-        <script>require('app');</script>
+        <script>require('holiday');</script>
         <div class="toolbar">
             <div class="row">
                 Welcome {{firstname}} <a href="/logout">logout</a>
@@ -11,9 +11,10 @@
                 {{/if}}
             </div>
         </div>
+
         <div class="view-container"
             data-view="request"
-            data-template="index/request"
+            data-template="holiday/request"
         ></div>
 
         <div class="view-container" data-view="_sending">
@@ -24,6 +25,6 @@
 
         <div class="view-container"
             data-view="current"
-            data-template="index/current"
+            data-template="holiday/current"
         ></div>
     {{/wrap}}

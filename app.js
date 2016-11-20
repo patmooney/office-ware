@@ -30,6 +30,10 @@ const schema = {
     organisation: new OrganisationModelClass( orm ),
     holiday: new HolidayModelClass( orm )
 };
+/* ensure the models are in sync with the DB */
+Object.keys( schema ).forEach( (key) => {
+    schema[key].model.sync();
+});
 
 const userController = new UserControllerClass(schema, templates);
 const holidayController = new HolidayControllerClass(schema, templates);
