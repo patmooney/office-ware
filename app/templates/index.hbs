@@ -1,7 +1,15 @@
     {{#wrap 'layout'}}
         <script>require('app');</script>
-        <div id="login-admin">
-            <a href="/admin"><i class="icon-key"></i></a>
+        <div class="toolbar">
+            <div class="row">
+                Welcome {{firstname}} <a href="/logout">logout</a>
+
+                {{#if isAdmin}}
+                    <div id="login-admin" class="two columns pull-right">
+                        <a href="/admin"><i class="icon-key"></i></a>
+                    </div>
+                {{/if}}
+            </div>
         </div>
         <div class="view-container"
             data-view="request"
@@ -15,7 +23,7 @@
         </div>
 
         <div class="view-container"
-            data-view="holiday-current"
+            data-view="current"
             data-template="index/current"
         ></div>
     {{/wrap}}

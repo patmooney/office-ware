@@ -44,9 +44,9 @@ export default class {
             return false;
         }
 
-        $('body').css({overflow: 'hidden'});
+        $('body').css({"overflow-y": 'hidden'});
         setTimeout(function() {
-            $('body').css({overflow: 'auto'});
+            $('body').css({"overflow-y": 'auto'});
         }, fadeTime);
 
         if ( $current ) {

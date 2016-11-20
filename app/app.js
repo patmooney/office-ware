@@ -15,7 +15,8 @@ $(function () {
             ( aj, stat, err ) => {
                 $('#view-container-2 > div').html(
                     "<h3>"+err+"</h3>" +
-                    "<p>Something bad has happened, <a href='#' onclick='makeTransition(\"view\")'>go back</a>"
+                    "<p>Something bad has happened," +
+                    "<a href='#' onclick='makeTransition(\"view\")'>go back</a>"
                 );
             }
         );
