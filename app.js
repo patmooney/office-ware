@@ -80,6 +80,9 @@ function _initApp() {
 function _setupApp () {
     var app = express();
 
+    /* disabel cache during develpment */
+    app.disable('view cache');
+
     /* set static assets dir */
     app.use('/', express.static('public'));
 
