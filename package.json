@@ -41,6 +41,6 @@
   },
   "scripts": {
     "postinstall": "brunch build -p; scripts/post-install.js",
-    "start": "babel-node app.js --presets es2015,stage-2"
+    "start": "babel-node app.js"
   }
 }

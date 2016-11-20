@@ -5,35 +5,15 @@ import hbs          from 'handlebars';
 import cookieParser from 'cookie-parser';
 import randomstring from 'randomstring';
 import bodyParser   from 'body-parser';
-import Sequelize    from 'sequelize';
 
 import utils                        from './lib/utils';
-
-import UserModelClass               from './lib/model/user';
-import OrganisationModelClass       from './lib/model/organisation';
-import HolidayModelClass            from './lib/model/holiday';
+import schema                       from './lib/schema';
 
 import UserControllerClass          from './lib/controller/user';
 import OrganisationControllerClass  from './lib/controller/organisation';
 import HolidayControllerClass       from './lib/controller/holiday';
 
-const orm = new Sequelize(process.env.DATABASE_URL, {
-    dialect: 'postgres',
-    dialectOptions: {
-        ssl: true
-    }
-});
-
 const templates = utils.compileTemplates( './app/templates' );
-const schema = {
-    user: new UserModelClass( orm ),
-    organisation: new OrganisationModelClass( orm ),
-    holiday: new HolidayModelClass( orm )
-};
-/* ensure the models are in sync with the DB */
-Object.keys( schema ).forEach( (key) => {
-    schema[key].model.sync();
-});
 
 const userController = new UserControllerClass(schema, templates);
 const holidayController = new HolidayControllerClass(schema, templates);
