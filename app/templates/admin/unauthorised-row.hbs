@@ -1,0 +1,25 @@
+{{#each unauthorised as |row index|}}
+<tr>
+    <td>
+        {{row.user.fullName}}
+    </td>
+    <td>
+        {{row.date_from}}
+    </td>
+    <td>
+        {{row.date_to}}
+    </td>
+    <td>
+        {{! number of days in holiday}}
+    </td>
+    <td>
+        {{! total before deduction}}
+    </td>
+    <td>
+        {{! total after deduction}}
+    </td>
+    <td>
+        {{row.updatedAt}}
+    </td>
+</tr>
+{{/each}}

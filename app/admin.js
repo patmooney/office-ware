@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Transition from 'transition';
 import Request from 'request';
-
+import UnauthorisedRow from './templates/admin/unauthorised-row.hbs';
 $(function () {
 
     var refreshUnauthorised = function () {
@@ -11,7 +11,9 @@ $(function () {
                 method: 'GET'
             },
             function ( data ) {
-                console.log(data);
+                $('table#unauthorised > tbody').html(
+                    UnauthorisedRow(data.data)
+                );
             }
         );
     };

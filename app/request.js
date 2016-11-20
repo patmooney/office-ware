@@ -48,8 +48,6 @@ export default class {
             values[$(inp).attr('id')] = $(inp).val();
         });
 
-        console.log( values, validator );
-
         var warnings = [];
         if ( validator ) {
             Object.keys( values ).forEach( (key) => {

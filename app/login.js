@@ -12,7 +12,7 @@ $(function () {
             passwordAgain: function ( val ) {
                 return $('form#register').find('input#password').val() === val;
             },
-            organisation: /^[a-zA-Z\.\-0-9]+$/
+            organisation: /^[a-zA-Z\.\-0-9\s]+$/
         }
     };
 
