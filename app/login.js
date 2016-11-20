@@ -22,7 +22,7 @@ $(function () {
     $('button#register').click( () => {
         Request.submitRequest(
             {
-                form: 'organisation',
+                form: 'register',
                 url: '/organisation',
                 method: 'POST',
                 validate: _validate['register']

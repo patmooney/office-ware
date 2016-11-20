@@ -7,7 +7,7 @@ $(function () {
     var refreshUnauthorised = function () {
         Request.submitRequest(
             {
-                url: '/api/admin/unauthorised',
+                url: '/api/holiday/unauthorised',
                 method: 'GET'
             },
             function ( data ) {

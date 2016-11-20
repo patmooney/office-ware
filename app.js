@@ -54,18 +54,25 @@ function _initApp() {
         return res.send(templates['login']());
     });
 
-
     /* user routes */
     app.get( '/register', (req,res) => { userController.register(req,res) } );
     app.post( '/register', (req,res) => { userController.registerDetails(req,res) } );
     app.post( '/login', (req,res) => { userController.login(req,res) } );
 
     /* app routes */
-    app.auth.get( '/', (req,res) => { holidayController.request(req,res) } );
-    app.auth.get( '/admin', (req,res) => { orgController.admin(req,res) } );
+    app.user.get( '/', (req,res) => { holidayController.request(req,res) } );
+    app.admin.get( '/admin', (req,res) => { orgController.admin(req,res) } );
 
     /* admin routes */
     app.post('/organisation', (req,res) => { orgController.register(req,res) } );
+
+    /* holiday routes */
+    app.admin.get(
+        '/api/holiday/unauthorised',
+        (req,res) => {
+            holidayController.unauthorised(req,res)
+        }
+    );
 
     return app;
 }
@@ -93,12 +100,15 @@ function _setupApp () {
         }
         return res.redirect('/login');
     };
-    var authRoute = function ( req, res, cb ){
+    var authRoute = function ( req, res, cb, admin=false ){
         var user_id = req.signedCookies.user_id;
         if ( user_id ){
             return schema.user.find( user_id ).then(
                 function ( user ) {
                     if ( user ) {
+                        if ( admin && ! user.is_admin ) {
+                            return res.redirect('/');
+                        }
                         req.user = user;
                         // user id logged in, proceed
                         return cb( req, res ); // using middleware seems overkill
@@ -109,12 +119,20 @@ function _setupApp () {
         }
         return authRouteError( req, res );
     };
-    app.auth = {
+    app.user = {
         post: function( route,  cb ) {
             app.post( route, function( req, res ) { authRoute( req, res, cb ); } );
         },
         get: function( route,  cb ) {
             app.get( route, function( req, res ) { authRoute( req, res, cb ); } );
+        }
+    };
+    app.admin = {
+        post: function( route,  cb ) {
+            app.post( route, function( req, res ) { authRoute( req, res, cb, true ); } );
+        },
+        get: function( route,  cb ) {
+            app.get( route, function( req, res ) { authRoute( req, res, cb, true ); } );
         }
     };
 

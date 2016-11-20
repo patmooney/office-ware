@@ -24,6 +24,9 @@ Usage:
 
 export default class {
     static _validateField ( value, validator ){
+
+        console.log( value, validator );
+
         if ( validator === undefined ){ // no validator
             return true;
         }
@@ -44,6 +47,8 @@ export default class {
         $(`form#${form}`).find(':input').each( ( _, inp ) => {
             values[$(inp).attr('id')] = $(inp).val();
         });
+
+        console.log( values, validator );
 
         var warnings = [];
         if ( validator ) {
