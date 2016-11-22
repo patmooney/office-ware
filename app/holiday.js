@@ -4,8 +4,16 @@ import 'jquery-ui/ui/effect';
 import Transition from 'transition';
 import Request from 'request';
 import holidayListTemplate from './templates/holiday/holiday-row.hbs';
+import bouncingBall from 'bouncing-ball';
 
 $(function () {
+
+    console.log( bouncingBall );
+                    var container = $('<div />',{ "class":"darkness" });
+                    $('body').append(container);
+                    (new bouncingBall({ ballColour: [ 'red','green','#ff00ee' ] })).bounce(container[0]);
+
+
 
     var _newId;
     window.Handlebars.registerHelper( 'formatDate', function ( date ) {
@@ -35,6 +43,7 @@ $(function () {
                 $( "i#action-delete" ).click( ( e ) => {
                     var row = $(e.target).parents('tr');
                     var id = $(e.target).attr('data-holiday-id');
+
                     Request.submitRequest(
                         {
                             url: `/api/holiday/${id}`,
