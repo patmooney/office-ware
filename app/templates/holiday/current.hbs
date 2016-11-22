@@ -1,19 +1,18 @@
 <div class="container">
     <div class="holiday-list-container">
-        <table class="u-full-width">
+        <table class="u-full-width" id="current-holiday">
             <thead>
                 <tr>
-                    <th>From</th><th>To</th><th>Type</th><th>Approved</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Type</th>
+                    <th>Approved</th>
+                    <th><!-- actions --></th>
                 </ty>
             </thead>
             <tbody>
-            {{#each fixtures}}
-                <tr>
-                    <td>{{this.from}}</td><td>{{this.to}}</td><td>{{this.type}}</td><td>{{this.approved}}</td>
-                </tr>
-            {{/each}}
             </tbody>
         </table>
-        <p><a href="#" id="go-back">Go back</a></p>
+        <p><a href="#" data-view="request">Go back</a></p>
     </div>
 </div>

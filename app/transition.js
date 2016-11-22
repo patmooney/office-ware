@@ -78,10 +78,7 @@ export default class {
         var _this = this;
         var routes = {};
 
-        console.log( 'init' );
-
         $('.view-container').each( function ( _, el ) {
-            console.log( el );
             $(el).attr('data-view-n',count);
             $(el).css({ top: '110%', display: "none" });
 
@@ -116,7 +113,7 @@ export default class {
                 $(`a[data-view="${view}"]`).each( ( _, el ) => {
                     $(el).click( e => {
                         e.preventDefault();
-                        router.navigate(`/${view}`);
+                        _this.router.navigate(`/${view}`);
                     });
                 });
             }
@@ -124,8 +121,12 @@ export default class {
             count++;
         });
 
-        var router = new Navigo( null, true ); // root, useHash
-        router.on(routes).resolve();
+        this.router = new Navigo( null, true ); // root, useHash
+        this.router.on(routes).resolve();
+    }
+
+    navigate ( view ) {
+        this.router.navigate(`/${view}`);
     }
 
 };

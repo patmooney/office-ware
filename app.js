@@ -60,19 +60,22 @@ function _initApp() {
     app.post( '/login', (req,res) => { userController.login(req,res) } );
 
     /* app routes */
-    app.user.get( '/', (req,res) => { holidayController.request(req,res) } );
-    app.admin.get( '/admin', (req,res) => { orgController.admin(req,res) } );
+    app.admin.get( '/admin', (req,res) => { orgController.index(req,res) } );
 
     /* admin routes */
     app.post('/organisation', (req,res) => { orgController.register(req,res) } );
 
     /* holiday routes */
+    app.user.get( '/', (req,res) => { holidayController.index(req,res) } );
     app.admin.get(
         '/api/holiday/unauthorised',
         (req,res) => {
             holidayController.unauthorised(req,res)
         }
     );
+    app.user.get('/api/holiday', (req,res) => { holidayController.get(req,res); } );
+    app.user.post('/api/holiday', (req,res) => { holidayController.post(req,res); } );
+    app.user.delete('/api/holiday/:holiday_id', (req,res) => { holidayController.delete( req, res ); } );
 
     return app;
 }
@@ -103,13 +106,13 @@ function _setupApp () {
         }
         return res.redirect('/login');
     };
-    var authRoute = function ( req, res, cb, admin=false ){
+    var authRoute = function ( req, res, cb, actor ){
         var user_id = req.signedCookies.user_id;
         if ( user_id ){
             return schema.user.find( user_id ).then(
                 function ( user ) {
                     if ( user ) {
-                        if ( admin && ! user.is_admin ) {
+                        if ( actor === "admin" && ! user.is_admin ) {
                             return res.redirect('/');
                         }
                         req.user = user;
@@ -122,22 +125,14 @@ function _setupApp () {
         }
         return authRouteError( req, res );
     };
-    app.user = {
-        post: function( route,  cb ) {
-            app.post( route, function( req, res ) { authRoute( req, res, cb ); } );
-        },
-        get: function( route,  cb ) {
-            app.get( route, function( req, res ) { authRoute( req, res, cb ); } );
-        }
-    };
-    app.admin = {
-        post: function( route,  cb ) {
-            app.post( route, function( req, res ) { authRoute( req, res, cb, true ); } );
-        },
-        get: function( route,  cb ) {
-            app.get( route, function( req, res ) { authRoute( req, res, cb, true ); } );
-        }
-    };
+    ['admin','user'].forEach( function ( actor ) {
+        ['get','post','delete'].forEach( function ( method ) {
+            app[actor] = app[actor] || {};
+            app[actor][method] = function( route,  cb ) {
+                app[method]( route, function( req, res ) { authRoute( req, res, cb, actor ); } );
+            };
+        });
+    });
 
     return app;
 }

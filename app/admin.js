@@ -9,7 +9,8 @@ $(function () {
             {
                 url: '/api/holiday/unauthorised',
                 method: 'GET'
-            },
+            }
+        ).then(
             function ( data ) {
                 $('table#unauthorised > tbody').html(
                     UnauthorisedRow(data.data)

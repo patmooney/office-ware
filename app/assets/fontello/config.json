@@ -17,6 +17,18 @@
       "css": "key",
       "code": 59393,
       "src": "elusive"
+    },
+    {
+      "uid": "2cc73cc335f054682c04fe63439c4dcb",
+      "css": "trash",
+      "code": 59394,
+      "src": "linecons"
+    },
+    {
+      "uid": "2aeb4987b469d22fcb8b471b6d2cdfff",
+      "css": "pencil",
+      "code": 59395,
+      "src": "linecons"
     }
   ]
 }

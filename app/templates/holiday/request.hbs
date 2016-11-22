@@ -1,29 +1,28 @@
-
 <div class="container">
     <div class="box">
         <h2>Holiday Request</h2>
-        <form id="request">
+        <form id="request" onsubmit="return false;">
         <div class="row">
             <div class="four columns">
-                <label for="datepicker-from">Date From</label>
-                <input type="text" class="u-full-width" name="from" id="datepicker-from" placeholder="18/06/2017"/>
+                <label for="date_from">Date From</label>
+                <input type="text" class="u-full-width" id="date_from" placeholder="18/06/2017"/>
             </div>
             <div class="four columns">
-                <label for="datepicker-to">Date To</label>
-                <input type="text" class="u-full-width" name="to" id="datepicker-to" placeholder="Date To"/>
+                <label for="date_to">Date To</label>
+                <input type="text" class="u-full-width" id="date_to" placeholder="Date To"/>
             </div>
             <div class="four columns">
-                <label for="holiday-type">Date To</label>
-                <select class="u-full-width" id="holiday-type">
+                <label for="type">Date To</label>
+                <select class="u-full-width" id="type">
                     <option value="holiday">Holiday</option>
                     <option value="illness">Illness</option>
                     <option value="other">Other</option>
                 </select>
             </div>
         </div>
-        <label for="holiday-message">Message</label>
-        <textarea class="u-full-width" placeholder="Message ..." id="holiday-message"></textarea>
-        <button class="button-primary" type="button" id="request">Submit</button>
+        <label for="message">Message</label>
+        <textarea class="u-full-width" placeholder="Message ..." id="message"></textarea>
+        <button class="button-primary" id="request">Submit</button>
         </form>
     </div>
 </div>

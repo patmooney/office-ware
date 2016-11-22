@@ -3,20 +3,74 @@ import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/ui/effect';
 import Transition from 'transition';
 import Request from 'request';
+import holidayListTemplate from './templates/holiday/holiday-row.hbs';
 
 $(function () {
-    $( "#datepicker-from, #datepicker-to" ).datepicker();
+
+    var _newId;
+    window.Handlebars.registerHelper( 'formatDate', function ( date ) {
+        return new Intl.DateTimeFormat().format(new Date(date));
+    });
+    var refreshHoliday = function () {
+        return Request.submitRequest(
+            {
+                url: '/api/holiday',
+                method: 'GET'
+            }
+        ).then(
+            function ( data ) {
+                if ( _newId ){
+                    data.data.holidays.forEach( function ( row ) {
+                        if ( row.id === _newId ){
+                            row.highlight = true;
+                        }
+                    });
+                }
+
+                $('table#current-holiday > tbody').html(
+                    holidayListTemplate( data.data )
+                );
+
+                // set up actions
+                $( "i#action-delete" ).click( ( e ) => {
+                    var row = $(e.target).parents('tr');
+                    var id = $(e.target).attr('data-holiday-id');
+                    Request.submitRequest(
+                        {
+                            url: `/api/holiday/${id}`,
+                            method: 'DELETE'
+                        }
+                    ).then(
+                        function () {
+                            row.remove();
+                        }
+                    );
+                });
+                $( "i#action-edit" ).click( ( e ) => {
+                    console.log( "EDIT", $(e.target).attr('data-holiday-id') );
+                });
+            }
+        );
+    };
+
+    var transition = new Transition();
+    transition.init({
+        'current': {
+            callback: function () { refreshHoliday(); }
+        }
+    });
 
     $( "button#request" ).click( () => {
-        transition( "sending" );
+        transition.navigate( "sending" );
         Request.submitRequest(
             {
                 url: '/api/holiday',
                 form: 'request'
-            },
+            }
+        ).then(
             function ( data ){
-                refreshHoliday();
-                transition("current");
+                _newId = data.id;
+                transition.navigate("current");
             },
             function ( err ) {
                 $('#view-container-2 > div').html(
@@ -28,24 +82,6 @@ $(function () {
         );
     });
 
-    var refreshHoliday = function () {
-        Request.submitRequest(
-            {
-                url: '/api/holiday',
-                method: 'GET'
-            },
-            function ( data ) {
-                $('.holiday-list-container').html(
-                    holidayListTemplate({ fixtures: data.data, hello: "sausage" })
-                );
-            }
-        );
-    };
+    $( "input#date_from, input#date_to" ).datepicker();
 
-    var transition = new Transition();
-    transition.init({
-        'current': {
-            callback: function () { refreshHoliday(); }
-        }
-    });
 });

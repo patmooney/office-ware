@@ -2,13 +2,10 @@
         <script>require('holiday');</script>
         <div class="toolbar">
             <div class="row">
-                Welcome {{firstname}} <a href="/logout">logout</a>
-
-                {{#if isAdmin}}
-                    <div id="login-admin" class="two columns pull-right">
-                        <a href="/admin"><i class="icon-key"></i></a>
-                    </div>
-                {{/if}}
+                <div class="three columns">
+                    Welcome {{firstname}} <a href="/logout">logout</a>
+                    <a href="/admin"><i class="icon-key"></i>admin</a>
+                </div>
             </div>
         </div>
 
@@ -17,7 +14,7 @@
             data-template="holiday/request"
         ></div>
 
-        <div class="view-container" data-view="_sending">
+        <div class="view-container" data-view="sending">
             <div class="container">
                 <h3>Sending request...</h3>
             </div>

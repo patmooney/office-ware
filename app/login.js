@@ -26,7 +26,8 @@ $(function () {
                 url: '/organisation',
                 method: 'POST',
                 validate: _validate['register']
-            },
+            }
+        ).then(
             function (){
                 window.location = '/admin';
             },
@@ -42,7 +43,8 @@ $(function () {
                 form: 'login',
                 url: '/login',
                 method: 'POST'
-            },
+            }
+        ).then(
             function (){
                 window.location = '/';
             },

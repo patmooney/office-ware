@@ -80,4 +80,24 @@ input.warning {
     box-shadow: 0px 0px 10px 0px rgba(255,0,0,1) !important;
 }
 
+table#current-holiday {
+    tbody {
+        tr.highlight {
+            font-weight: bold;
+            color: blue;
+        }
+    }
+}
+
+.font-green {
+    color: green;
+}
+.font-red {
+    color: red;
+}
+
+i[id^="action-"] {
+    cursor: pointer;
+}
+
 @-ms-viewport { width: device-width; }

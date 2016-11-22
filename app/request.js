@@ -16,7 +16,8 @@ Usage:
                 email: new RegExp('\@.+\..+'),
                 password: function ( value ) { return value.length >= 8; }
             }
-        },
+        }
+    ).then(
         function ( data ) { // success },
         function ( err ) { // failure }
     );
@@ -68,7 +69,7 @@ export default class {
         return values;
     }
 
-    static submitRequest ( opts, cb, err ) {
+    static submitRequest ( opts ) {
         var values;
         if ( opts.form ){
             values = this.validateForm( opts.form, opts.validate );
@@ -79,8 +80,6 @@ export default class {
             {
                 data: values ? JSON.stringify(values) : null,
                 method: opts.method || 'POST',
-                success: cb,
-                error: err,
                 contentType: 'application/json'
             }
         );

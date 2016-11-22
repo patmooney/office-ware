@@ -1,0 +1,18 @@
+{{#each holidays as |row index|}}
+    {{#if row.highlight}}<tr class="highlight">{{else}}<tr>{{/if}}
+        <td>{{formatDate row.date_from "short"}}</td>
+        <td>{{formatDate row.date_to "short"}}</td>
+        <td>{{row.type}}</td>
+        <td>
+            {{#if row.authorised}}
+                <span class="font-green">&#10004;</span>
+            {{else}}
+                <span class="font-red">&#10008;</span>
+            {{/if}}
+        </td>
+        <td>
+            <i class="icon-pencil" id="action-edit" title="edit" data-holiday-id="{{row.id}}"></i>
+            <i class="icon-trash" id="action-delete" title="delete" data-holiday-id="{{row.id}}"></i>
+        </td>
+    </tr>
+{{/each}}
