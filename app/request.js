@@ -1,4 +1,6 @@
 import $ from 'jquery';
+import LoadingScreen from './loading';
+
 
 /* request.js
 Ajax utility methods, will scrape values from the
@@ -24,6 +26,7 @@ Usage:
 */
 
 export default class {
+
     static _validateField ( value, validator ){
 
         console.log( value, validator );
@@ -75,12 +78,25 @@ export default class {
             values = this.validateForm( opts.form, opts.validate );
             if ( ! values ) { return; }
         }
+
+        var loadingScreen = new LoadingScreen();
+        loadingScreen.start();
+
         return jQuery.ajax(
             opts.url,
             {
                 data: values ? JSON.stringify(values) : null,
                 method: opts.method || 'POST',
                 contentType: 'application/json'
+            }
+        ).then(
+            function ( data ) {
+                loadingScreen.destroy();
+                return data;
+            },
+            function ( xhr, t, e ) {
+                loadingScreen.destroy();
+                return xhr.responseJSON.error || e;
             }
         );
     }

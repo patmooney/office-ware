@@ -4,16 +4,8 @@ import 'jquery-ui/ui/effect';
 import Transition from 'transition';
 import Request from 'request';
 import holidayListTemplate from './templates/holiday/holiday-row.hbs';
-import bouncingBall from 'bouncing-ball';
 
 $(function () {
-
-    console.log( bouncingBall );
-                    var container = $('<div />',{ "class":"darkness" });
-                    $('body').append(container);
-                    (new bouncingBall({ ballColour: [ 'red','green','#ff00ee' ] })).bounce(container[0]);
-
-
 
     var _newId;
     window.Handlebars.registerHelper( 'formatDate', function ( date ) {
