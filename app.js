@@ -7,7 +7,7 @@ import randomstring from 'randomstring';
 import bodyParser   from 'body-parser';
 
 import utils                        from './lib/utils';
-import schema                       from './lib/schema';
+import Schema                       from './lib/schema';
 
 import UserControllerClass          from './lib/controller/user';
 import OrganisationControllerClass  from './lib/controller/organisation';
@@ -15,6 +15,7 @@ import HolidayControllerClass       from './lib/controller/holiday';
 
 const templates = utils.compileTemplates( './app/templates' );
 
+const schema = Schema( process.env.DATABASE_URL );
 const userController = new UserControllerClass(schema, templates);
 const holidayController = new HolidayControllerClass(schema, templates);
 const orgController = new OrganisationControllerClass(schema, templates);

@@ -4,7 +4,10 @@ const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(':memory:');
 process.env.database_url="sqlite::memory:";
 
-import schema from '../../../lib/schema';
+import schema from '../../lib/schema';
 
 describe('Admin - Get Unauthorised holidays', function () {
+
+    schema.holiday.
+
 });
