@@ -1,0 +1,9 @@
+{{#each users as |user index|}}
+    <tr>
+        <td title="{{user.email}}">{{user.name}}</td>
+        <td>{{user.days_used}}</td>
+        <td>{{user.days_remaining}}</td>
+        <td>{{user.allowed_days}}</td>
+        <td></td>
+    </tr>
+{{/each}}

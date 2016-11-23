@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import Transition from 'transition';
 import Request from 'request';
-import UnauthorisedRow from './templates/admin/unauthorised-row.hbs';
+import unauthorisedRow from './templates/admin/unauthorised-row.hbs';
+import userRow from './templates/admin/user-row.hbs';
+
 $(function () {
 
     var refreshUnauthorised = function () {
@@ -13,7 +15,20 @@ $(function () {
         ).then(
             function ( data ) {
                 $('table#unauthorised > tbody').html(
-                    UnauthorisedRow(data.data)
+                    unauthorisedRow(data.data)
+                );
+            }
+        );
+    };
+
+    var refreshUsers = function () {
+        Request.submitRequest({
+            url: '/api/organisation/users',
+            method: 'GET'
+        }).then(
+            function ( data ){
+                $('table#users > tbody').html(
+                    userRow(data.data)
                 );
             }
         );
@@ -24,6 +39,11 @@ $(function () {
         unauthorised: {
             callback: function () {
                 refreshUnauthorised();
+            }
+        },
+        users: {
+            callback: function () {
+                refreshUsers();
             }
         }
     });

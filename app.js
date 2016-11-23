@@ -66,6 +66,7 @@ function _initApp() {
 
     /* admin routes */
     app.post('/organisation', (req,res) => { orgController.register(req,res) } );
+    app.admin.get('/api/organisation/users', (req,res) => { orgController.listUsers(req,res); } );
 
     /* holiday routes */
     app.user.get( '/', (req,res) => { holidayController.index(req,res) } );

@@ -1,24 +1,41 @@
 <div class="container">
     <div class="box">
-        <form id="add">
-            <div class="row">
-                <div class="three columns">
-                    <label for="firstname">First Name</label>
-                    <input type="text" id="firstname" placeholder="Jane" />
+        <div class="row">
+            <form id="add" class="u-full-width">
+                <div class="row">
+                    <div class="three columns">
+                        <label for="firstname">First Name</label>
+                        <input type="text" id="firstname" placeholder="Jane" />
+                    </div>
+                    <div class="three columns">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" id="lastname" placeholder="Smith" />
+                    </div>
+                    <div class="three columns">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" placeholder="jane@example.com" />
+                    </div>
+                    <div class="three columns">
+                        <label for="allowance">Allowance</label>
+                        <input type="text" id="allowance" placeholder="15" />
+                    </div>
                 </div>
-                <div class="three columns">
-                    <label for="lastname">Last Name</label>
-                    <input type="text" id="lastname" placeholder="Smith" />
-                </div>
-                <div class="three columns">
-                    <label for="email">Email</label>
-                    <input type="text" id="email" placeholder="jane@example.com" />
-                </div>
-                <div class="three columns">
-                    <label for="allowance">Allowance</label>
-                    <input type="text" id="allowance" placeholder="15" />
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
+        <div class="row">
+            <table id="users" class="u-full-width">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Days Used</th>
+                        <th>Days Remaining</th>
+                        <th>Days Allowed</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
