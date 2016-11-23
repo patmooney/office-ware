@@ -1,11 +1,9 @@
 const assert = require('assert');
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database(':memory:');
-
-process.env.DATABASE_URL = "sqlite::memory:";
-
 import Schema from '../../lib/schema';
 const schema = Schema("sqlite::memory:");
+
 const userDetails = {
     email: 'john@example.com',
     password: 'testpassword',

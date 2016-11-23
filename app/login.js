@@ -1,8 +1,14 @@
 import $ from 'jquery';
+import 'jquery-ui/ui/widgets/datepicker';
+import 'jquery-ui/ui/effect';
 import Transition from 'transition';
-import Request from 'request'
+import Request from 'request';
+import LoadingScreen from './loading';
 
 $(function () {
+
+    var loadingScreen = new LoadingScreen();
+
     var _validate = {
         register: {
             firstname: /^[a-zA-Z\.\-]+$/,
@@ -12,7 +18,8 @@ $(function () {
             passwordAgain: function ( val ) {
                 return $('form#register').find('input#password').val() === val;
             },
-            organisation: /^[a-zA-Z\.\-0-9\s]+$/
+            organisation: /^[a-zA-Z\.\-0-9\s]+$/,
+            reset_date: /^[0-9\/]+$/
         }
     };
 
@@ -20,6 +27,7 @@ $(function () {
     transition.init();
 
     $('button#register').click( () => {
+        loadingScreen.show();
         Request.submitRequest(
             {
                 form: 'register',
@@ -29,15 +37,18 @@ $(function () {
             }
         ).then(
             function (){
+                loadingScreen.hide();
                 window.location = '/admin';
             },
-            function ( data ) {
-                console.log( data );
+            function ( error ) {
+                loadingScreen.hide();
+                console.log( error );
             }
         );
     });
 
     $('button#login').click( () => {
+        loadingScreen.show();
         Request.submitRequest(
             {
                 form: 'login',
@@ -46,11 +57,18 @@ $(function () {
             }
         ).then(
             function (){
+                loadingScreen.hide();
                 window.location = '/';
             },
-            function ( data ) {
-                console.log( data );
+            function ( error ) {
+                loadingScreen.hide();
+                console.log( error );
             }
         );
     });
+
+    $( "input#reset_date" ).datepicker({
+        constrainInput: true
+    });
+
 });

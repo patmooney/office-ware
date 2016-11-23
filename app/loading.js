@@ -8,12 +8,11 @@ export default class {
         /* darkness */
         this.darkness = $('<div />');
         this.darkness.css({
-            display: "hidden",
             position: "absolute",
-            top: "0px",
+            top: "50px",
             left: "0px",
             width: "100%",
-            height: "100%",
+            height: "400px",
             "background-color": "black",
             opacity: "0.8"
         });
@@ -24,36 +23,31 @@ export default class {
             position: "absolute",
             height: "100px",
             width: "100px",
-            top: "25%",
+            top: "200px",
             left: "50%",
             "margin-left": "-50px",
             "background-color": "white",
-            "border-radius": "15px",
-            "display": "hidden"
+            "border-radius": "15px"
         });
 
         $('body').append(this.darkness);
         $('body').append(this.container);
-
-        this.ball = new BouncingBall( opts );
-    }
-
-    start () {
-        this.darkness.show();
-        this.container.show();
-        this.ball.bounce( this.containerEl() );
-    }
-
-    stop () {
-        this.ball.unbounce();
         this.darkness.hide();
         this.container.hide();
+
+        this.ball = new BouncingBall( this.containerEl(), opts );
     }
 
-    destroy () {
-        this.stop();
-        this.darkness.remove();
-        this.container.remove();
+    show () {
+        this.darkness.fadeIn(500);
+        this.container.fadeIn(500);
+        this.ball.bounce();
+    }
+
+    hide () {
+        this.darkness.hide();
+        this.container.hide();
+        this.ball.unbounce();
     }
 
     containerEl () {

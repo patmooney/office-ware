@@ -1,13 +1,10 @@
 const assert = require('assert');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database(':memory:');
-process.env.database_url="sqlite::memory:";
+import Schema from '../../lib/schema';
+const schema = Schema("sqlite::memory:");
 
-import schema from '../../lib/schema';
+describe('Holiday - Add holiday', function () {
 
-describe('Admin - Get Unauthorised holidays', function () {
-
-    schema.holiday.
 
 });

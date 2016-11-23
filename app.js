@@ -59,6 +59,7 @@ function _initApp() {
     app.get( '/register', (req,res) => { userController.register(req,res) } );
     app.post( '/register', (req,res) => { userController.registerDetails(req,res) } );
     app.post( '/login', (req,res) => { userController.login(req,res) } );
+    app.user.get('/api/user/remaining', (req,res) => { userController.remaining(req,res); } );
 
     /* app routes */
     app.admin.get( '/admin', (req,res) => { orgController.index(req,res) } );

@@ -1,6 +1,4 @@
 import $ from 'jquery';
-import LoadingScreen from './loading';
-
 
 /* request.js
 Ajax utility methods, will scrape values from the
@@ -28,9 +26,6 @@ Usage:
 export default class {
 
     static _validateField ( value, validator ){
-
-        console.log( value, validator );
-
         if ( validator === undefined ){ // no validator
             return true;
         }
@@ -74,13 +69,12 @@ export default class {
 
     static submitRequest ( opts ) {
         var values;
+        var _this = this;
+
         if ( opts.form ){
             values = this.validateForm( opts.form, opts.validate );
-            if ( ! values ) { return; }
+            if ( ! values ) { return Promise.reject("Invalid Input"); }
         }
-
-        var loadingScreen = new LoadingScreen();
-        loadingScreen.start();
 
         return jQuery.ajax(
             opts.url,
@@ -91,13 +85,28 @@ export default class {
             }
         ).then(
             function ( data ) {
-                loadingScreen.destroy();
                 return data;
             },
-            function ( xhr, t, e ) {
-                loadingScreen.destroy();
-                return xhr.responseJSON.error || e;
+            function ( xhr, code, message ) {
+                var error = xhr.responseJSON.error || 'Internal Error';
+                var missing = xhr.responseJSON.missing;
+
+                if ( missing && missing.length ){
+                    var missingString = _this._resolveMissing( opts, missing );
+                    error += ": " + missingString;
+                }
+
+                return Promise.reject( error );
             }
         );
     }
+
+    static _resolveMissing ( opts, missing ) {
+        var missingLabels = [];
+        missing.forEach( function ( id ) {
+            missingLabels.push( $(`form#${opts.form}`).find(`label[for="${id}"]`).first().text() );
+        });
+        return missingLabels.join( ', ' );
+    }
+
 };
