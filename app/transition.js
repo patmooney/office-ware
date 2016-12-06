@@ -32,8 +32,8 @@ export default class {
         var to = $to.attr('data-view-n');
 
         // where the 'current' view should end up
-        var curAnim = to > currentScreen ? { top: "-110%" } : { top: '110%' };
-        // where the 'to' view should being
+        var curAnim = to > currentScreen ? { top: '-'+($current.height()+100)+"px" } : { top: '110%' };
+        // where the 'to' view should begin
         var toAnim = to > currentScreen ? { top: "110%" } : { top: '-110%' };
 
         if ( this._pageLoad ) {

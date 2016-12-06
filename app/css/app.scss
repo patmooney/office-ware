@@ -32,6 +32,19 @@ div.box {
 
     h2 {
         font-size: 60px;
+        word-break: break-word;
+    }
+}
+
+table.mobile-table {
+    margin-top: 10px;
+    tbody {
+        tr {
+            td {
+                border: solid 1px #d6d6d6;
+                padding: 5px;
+            }
+        }
     }
 }
 
@@ -46,8 +59,7 @@ div.box-down {
         margin: 0px;
     }
 }
-
-div#error {
+#error,.error {
     color: red;
 }
 
@@ -104,5 +116,27 @@ table#current-holiday {
 i[id^="action-"] {
     cursor: pointer;
 }
+
+div.darkness {
+    position: "absolute";
+    top: 50px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.6;
+}
+
+div.loading-container {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    top: 200px;
+    left: 50%;
+    margin-left: -50px;
+    background-color: white;
+    border-radius: 15px;
+}
+
 
 @-ms-viewport { width: device-width; }

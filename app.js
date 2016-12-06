@@ -76,6 +76,7 @@ function _initApp() {
             holidayController.unauthorised(req,res)
         }
     );
+    app.admin.post('/api/holiday/:holiday_id/authorise', (req,res) => { holidayController.authorise( req, res ); } );
     app.user.get('/api/holiday', (req,res) => { holidayController.get(req,res); } );
     app.user.post('/api/holiday', (req,res) => { holidayController.post(req,res); } );
     app.user.delete('/api/holiday/:holiday_id', (req,res) => { holidayController.delete( req, res ); } );

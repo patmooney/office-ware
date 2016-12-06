@@ -1,25 +1,66 @@
-{{#each unauthorised as |row index|}}
-<tr>
-    <td>
-        {{row.user.fullName}}
-    </td>
-    <td>
-        {{row.date_from}}
-    </td>
-    <td>
-        {{row.date_to}}
-    </td>
-    <td>
-        {{! number of days in holiday}}
-    </td>
-    <td>
-        {{! total before deduction}}
-    </td>
-    <td>
-        {{! total after deduction}}
-    </td>
-    <td>
-        {{row.updatedAt}}
-    </td>
-</tr>
-{{/each}}
+{{#mobile}}
+    {{#each unauthorised as |row index|}}
+    <div class="mobile-row">
+        <table class="mobile-table">
+            <tbody>
+                <tr><td class="label">User</td><td>{{row.user.fullName}}</td></tr>
+                <tr><td class="label">Days From</td><td>{{formatDate row.date_from}}</td></tr>
+                <tr><td class="label">Days To</td><td>{{formatDate row.date_to}}</td></tr>
+                <tr><td class="label">Days Total</td><td>{{row.day_total}}</td></tr>
+                <tr><td class="label">Remaining Before</td><td>{{row.user.days_remaining}}</td></tr>
+                <tr><td class="label">Remaining After</td><td {{#if row.remaining_warn}} class='error'{{/if}}>{{row.remaining_after}}</td></tr>
+                <tr><td class="label">Date Submitted</td><td>{{formatDate row.updatedAt}}</td></tr>
+                <tr><td class="label">Actions</td><td><a href="#" data-action="authorise-holiday">approve</a> <a href="#" data-action="decline-holiday">decline</a></td></tr>
+            </tbody>
+        </table>
+    </div>
+    {{/each}}
+{{else}}
+    <table class="u-full-width" id="unauthorised">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th colspan=2>Dates</th>
+                <th>Total Days</th>
+                <th colspan=2>Remaining</th>
+                <th>Date Submitted</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>From</th>
+                <th>To</th>
+                <th>
+                <th>Before</th>
+                <th>After</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each unauthorised as |row index|}}
+            <tr>
+                <td>
+                    {{row.user.fullName}}
+                </td>
+                <td>
+                    {{formatDate row.date_from}}
+                </td>
+                <td>
+                    {{formatDate row.date_to}}
+                </td>
+                <td>
+                    {{row.day_total}}
+                </td>
+                <td>
+                    {{row.user.days_remaining}}
+                </td>
+                <td {{#if row.remaining_warn}} class='error'{{/if}}>
+                    {{row.remaining_after}}
+                </td>
+                <td>
+                    {{formatDate row.updatedAt}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+{{/mobile}}

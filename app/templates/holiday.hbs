@@ -2,10 +2,10 @@
         <script>require('holiday');</script>
         <div class="toolbar">
             <div class="row">
-                <div class="three columns">
-                    Welcome {{firstname}} <a href="/logout">logout</a>
-                    <a href="/admin"><i class="icon-key"></i>admin</a>
-                </div>
+                Welcome {{firstname}} <a href="/logout">logout</a>
+                {{#if isAdmin}}<a href="/admin"><i class="icon-key"></i>admin</a>{{/if}}
+            </div>
+            <div class="row" id="holiday-counts">
             </div>
         </div>
 

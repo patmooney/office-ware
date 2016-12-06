@@ -42,7 +42,6 @@ $(function () {
             },
             function ( error ) {
                 loadingScreen.hide();
-                console.log( error );
             }
         );
     });
@@ -62,7 +61,9 @@ $(function () {
             },
             function ( error ) {
                 loadingScreen.hide();
-                console.log( error );
+                $('form#login > div > div#error').html(
+                    '<strong>Email/Password not know</strong> try again or <a href="/reset-password">reset password</a>'
+                );
             }
         );
     });

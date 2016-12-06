@@ -7,16 +7,31 @@ import userRow from './templates/admin/user-row.hbs';
 $(function () {
 
     var refreshUnauthorised = function () {
-        Request.submitRequest(
+        var unauthorisedPromise = Request.submitRequest(
             {
                 url: '/api/holiday/unauthorised',
                 method: 'GET'
             }
         ).then(
             function ( data ) {
-                $('table#unauthorised > tbody').html(
-                    unauthorisedRow(data.data)
+                var authData = data.data.unauthorised.map( function (row) {
+                    var remaining_after = row.user.days_remaining - row.day_total;
+                    return Object.assign(
+                        row,
+                        {
+                            remaining_after: remaining_after,
+                            remaining_warn: ( remaining_after < 0 ) ? true: false
+                        }
+                    );
+                });
+                $('div#unauthorised').html(
+                    unauthorisedRow({ unauthorised: authData })
                 );
+                $('a[data-action="authorise-holiday"').on( 'click', function ( e ) {
+                    console.log( e );
+                });
+                $('a[data-action="decline-holiday"').on( 'click', function ( e ) {
+                });
             }
         );
     };

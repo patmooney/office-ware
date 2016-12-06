@@ -88,8 +88,13 @@ export default class {
                 return data;
             },
             function ( xhr, code, message ) {
-                var error = xhr.responseJSON.error || 'Internal Error';
-                var missing = xhr.responseJSON.missing;
+                var missing;
+                var error = xhr.responseText;
+
+                if ( xhr.responseJSON ) {
+                    error = xhr.responseJSON.error || 'Internal Error';
+                    missing = xhr.responseJSON.missing;
+                }
 
                 if ( missing && missing.length ){
                     var missingString = _this._resolveMissing( opts, missing );

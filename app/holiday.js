@@ -13,7 +13,15 @@ $(function () {
             url: '/api/user/remaining',
             method: 'GET'
         }
-    );
+    ).then(
+        function ( data ) {
+            $('div#holiday-counts').html(
+                '<strong>allowance:</strong> ' + data.data.allowed +
+                ' <strong>taken:</strong> ' + data.data.days +
+                ' <strong>remaining:</strong> ' + data.data.remaining
+            );
+        }
+    )
 
     var _validator = {
         request: {
@@ -30,10 +38,7 @@ $(function () {
     var loadingScreen = new LoadingScreen();
     
     var _newId;
-    window.Handlebars.registerHelper( 'formatDate', function ( date ) {
-        return new Intl.DateTimeFormat().format(new Date(date));
-    });
-    var refreshHoliday = function () {
+        var refreshHoliday = function () {
         return Request.submitRequest(
             {
                 url: '/api/holiday',
